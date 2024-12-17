@@ -20,6 +20,12 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        // Redirect unauthenticated users to the login page
+        if (localStorage.getItem('authenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
     <h1>Kumite Questions</h1>
@@ -70,6 +76,7 @@
             showQuestion();
         }
 
+    </script>
     </script>
 </body>
 </html>
