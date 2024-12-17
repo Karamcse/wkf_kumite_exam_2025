@@ -3,61 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WKF Karate Federation - Login</title>
+    <title>Login Page</title>
     <style>
-        /* General Styles */
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #007bff, #00c6ff);
-            color: #333;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
         }
-
-        /* Header Section */
-        .header {
-            text-align: center;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            margin: 10px 0;
-            text-transform: uppercase;
-        }
-
-        .header h2 {
-            font-size: 22px;
-            margin: 5px 0;
-        }
-
-        .header h3 {
-            font-size: 16px;
-            margin: 5px 0;
-            font-weight: normal;
-        }
-
-        /* Login Box */
         .login-container {
             background-color: #fff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             text-align: center;
-            width: 300px;
         }
-
-        .login-container h2 {
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
         input {
             padding: 10px;
             margin: 10px 0;
@@ -65,94 +28,35 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
         button {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        #error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
-        /* Footer Section */
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #fff;
-        }
-
-        .footer img {
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            margin-bottom: 10px;
-        }
-
-        .footer p {
-            margin: 5px 0;
-        }
-
-        .footer span {
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <div class="header">
-        <h1>WKF KARATE FEDERATION</h1>
-        <h2>Kumite Competition</h2>
-        <h3>Examination Questions for Kumite Referees and Judges</h3>
-    </div>
-
-    <!-- Login Section -->
     <div class="login-container">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Enter Username" />
         <input type="password" id="password" placeholder="Enter Password" />
-        <button id="login-btn" onclick="checkCredentials()" disabled>Login</button>
-        <p id="error-message"></p>
+        <button onclick="checkCredentials()">Login</button>
+        <p id="error-message" style="color: red;"></p>
     </div>
 
-    <!-- Footer Section -->
-    <div class="footer">
-        <img src="images/organizer.jpg" alt="Organizer Photo" />
-        <p>Organised by</p>
-        <p><span>Karamchand Gandhi</span></p>
-        <p>Puducherry State Representative - Shobukai Shito Ryu Karate Federation</p>
-        <p>AKF Kata and Kumite Judge</p>
-    </div>
-
-    <!-- JavaScript -->
     <script>
         let correctUsername = '';
         let correctPassword = '';
-        const loginButton = document.getElementById('login-btn');
 
-        // Fetch credentials from credentials.json
-        fetch('credentials.json')
+        // Fetch the credentials from credentials.json
+        fetch('./credentials.json')
             .then(response => response.json())
             .then(data => {
                 correctUsername = data.username;
                 correctPassword = data.password;
-                loginButton.disabled = false; // Enable login button once credentials are loaded
             })
             .catch(error => {
                 console.error('Error loading credentials:', error);
@@ -163,9 +67,10 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            // Compare input with fetched credentials
             if (username === correctUsername && password === correctPassword) {
                 localStorage.setItem('authenticated', 'true');
-                window.location.href = 'index.html';
+                window.location.href = 'index.html'; // Redirect to main page
             } else {
                 document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
             }
