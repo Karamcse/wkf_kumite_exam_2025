@@ -38,6 +38,13 @@
             font-weight: normal;
         }
 
+        .header h3 {
+            font-size: 14px;
+            margin: 5px 0;
+            font-style: italic;
+            font-weight: normal;
+        }
+
         /* Login Container */
         .login-container {
             background-color: #ffffff;
@@ -63,6 +70,7 @@
 
         input {
             padding: 10px;
+            margin: 10px 0;
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -83,7 +91,7 @@
         button {
             padding: 10px;
             width: 100%;
-            background-color: #5cb85c;
+            background-color: #5cb85c; /* Soft green */
             color: white;
             border: none;
             border-radius: 5px;
@@ -100,6 +108,53 @@
             margin-top: 10px;
             font-size: 12px;
         }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            color: #2c3e50;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .footer img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer span {
+            font-weight: bold;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header h2 {
+                font-size: 18px;
+            }
+
+            .header h3 {
+                font-size: 12px;
+            }
+
+            .login-container {
+                padding: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -107,6 +162,7 @@
     <div class="header">
         <h1>WKF KARATE FEDERATION</h1>
         <h2>Kumite Competition</h2>
+        <h3>Examination Questions for Kumite Referees and Judges</h3>
     </div>
 
     <!-- Login Container -->
@@ -123,6 +179,15 @@
         <p id="error-message"></p>
     </div>
 
+    <!-- Footer with Organizer Info -->
+    <div class="footer">
+        <img src="images/organizer.jpeg" alt="Organizer Photo" />
+        <p>Organised by</p>
+        <p><span>Karamchand Gandhi</span></p>
+        <p>Puducherry State Representative - Shobukai Shito Ryu Karate Federation</p>
+        <p>AKF Kata and Kumite Judge</p>
+    </div>
+
     <!-- JavaScript -->
     <script>
         let credentials = []; // Array to store multiple credentials
@@ -131,7 +196,7 @@
         fetch('./credentials.json')
             .then(response => response.json())
             .then(data => {
-                credentials = data;
+                credentials = data; // Store the array of credentials
             })
             .catch(error => {
                 console.error('Error loading credentials:', error);
@@ -142,6 +207,7 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            // Check if input matches any username-password pair
             const isValid = credentials.some(
                 (cred) => cred.username === username && cred.password === password
             );
@@ -160,10 +226,10 @@
 
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleIcon.textContent = '🙈'; // Change icon to hide
+                toggleIcon.textContent = '🔓'; // Change icon to hide
             } else {
                 passwordField.type = 'password';
-                toggleIcon.textContent = '👁️'; // Change icon to show
+                toggleIcon.textContent = '🔒'; // Change icon to show
             }
         }
     </script>
