@@ -28,23 +28,33 @@
 
     <script>
         let questions = [];
-        const excludeList = [1, 3, 5]; // Example: Questions to exclude (update as needed)
+        const excludeList = [1, 3, 5]; // Example exclude list
         let availableQuestions = [];
         let currentQuestionIndex = 0;
 
         // Fetch questions from the JSON file
-        fetch('./questions.json')
+        fetch('questions.json')
             .then(response => response.json())
             .then(data => {
                 questions = data;
                 // Filter out excluded questions
                 availableQuestions = questions.filter(q => !excludeList.includes(q.number));
+                // Shuffle the questions array randomly
+                shuffleQuestions();
                 showQuestion();
             })
             .catch(error => {
                 console.error('Error loading questions:', error);
                 document.getElementById('question-container').innerText = 'Failed to load questions!';
             });
+
+        // Function to shuffle the questions array
+        function shuffleQuestions() {
+            for (let i = availableQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
+            }
+        }
 
         function showQuestion() {
             if (currentQuestionIndex < availableQuestions.length) {
@@ -59,6 +69,7 @@
             currentQuestionIndex++;
             showQuestion();
         }
+
     </script>
 </body>
 </html>
