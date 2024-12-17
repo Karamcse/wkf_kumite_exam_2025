@@ -10,7 +10,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #007bff, #00c6ff);
+            background: linear-gradient(to bottom, #f0f8ff, #dbe9f6); /* Light sky and soft blue gradient */
             color: #333;
             display: flex;
             justify-content: center;
@@ -22,7 +22,7 @@
 
         /* Header */
         .header {
-            color: white;
+            color: #2c3e50;
             margin-bottom: 20px;
         }
 
@@ -46,16 +46,16 @@
 
         /* Login Container */
         .login-container {
-            background-color: #fff;
-            padding: 20px;
+            background-color: #ffffff; /* White container */
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
             width: 320px;
             text-align: center;
         }
 
         .login-container h2 {
-            color: #007bff;
+            color: #34495e;
             margin-bottom: 20px;
         }
 
@@ -65,12 +65,13 @@
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
         }
 
         button {
             padding: 10px;
             width: 100%;
-            background-color: #007bff;
+            background-color: #5cb85c; /* Soft green */
             color: white;
             border: none;
             border-radius: 5px;
@@ -79,7 +80,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #4cae4c; /* Darker green on hover */
         }
 
         #error-message {
@@ -90,7 +91,7 @@
         /* Footer */
         .footer {
             margin-top: 30px;
-            color: white;
+            color: #2c3e50;
             font-size: 14px;
             text-align: center;
         }
@@ -138,36 +139,36 @@
     </div>
 
     <!-- JavaScript -->
-<script>
-    let credentials = []; // Array to store multiple credentials
+    <script>
+        let credentials = []; // Array to store multiple credentials
 
-    // Fetch the credentials from credentials.json
-    fetch('./credentials.json')
-        .then(response => response.json())
-        .then(data => {
-            credentials = data; // Store the array of credentials
-        })
-        .catch(error => {
-            console.error('Error loading credentials:', error);
-            document.getElementById('error-message').innerText = 'Error loading credentials!';
-        });
+        // Fetch the credentials from credentials.json
+        fetch('./credentials.json')
+            .then(response => response.json())
+            .then(data => {
+                credentials = data; // Store the array of credentials
+            })
+            .catch(error => {
+                console.error('Error loading credentials:', error);
+                document.getElementById('error-message').innerText = 'Error loading credentials!';
+            });
 
-    function checkCredentials() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        function checkCredentials() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-        // Check if input matches any username-password pair
-        const isValid = credentials.some(
-            (cred) => cred.username === username && cred.password === password
-        );
+            // Check if input matches any username-password pair
+            const isValid = credentials.some(
+                (cred) => cred.username === username && cred.password === password
+            );
 
-        if (isValid) {
-            localStorage.setItem('authenticated', 'true');
-            window.location.href = 'questions.html'; // Redirect to questions page
-        } else {
-            document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
+            if (isValid) {
+                localStorage.setItem('authenticated', 'true');
+                window.location.href = 'questions.html'; // Redirect to questions page
+            } else {
+                document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
