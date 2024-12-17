@@ -16,7 +16,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
         }
 
@@ -24,21 +24,22 @@
         .header {
             color: #2c3e50;
             margin-bottom: 20px;
+            padding: 10px;
         }
 
         .header h1 {
-            font-size: 36px;
-            margin: 10px 0;
+            font-size: 28px;
+            margin: 5px 0;
         }
 
         .header h2 {
-            font-size: 24px;
+            font-size: 20px;
             margin: 5px 0;
             font-weight: normal;
         }
 
         .header h3 {
-            font-size: 16px;
+            font-size: 14px;
             margin: 5px 0;
             font-style: italic;
             font-weight: normal;
@@ -46,17 +47,18 @@
 
         /* Login Container */
         .login-container {
-            background-color: #ffffff; /* White container */
-            padding: 25px;
+            background-color: #ffffff;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-            width: 320px;
+            width: 90%; /* Use 90% of the screen width */
+            max-width: 350px; /* Max width for larger screens */
             text-align: center;
         }
 
         .login-container h2 {
             color: #34495e;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         input {
@@ -65,7 +67,7 @@
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
         }
 
         button {
@@ -80,26 +82,27 @@
         }
 
         button:hover {
-            background-color: #4cae4c; /* Darker green on hover */
+            background-color: #4cae4c;
         }
 
         #error-message {
             color: red;
             margin-top: 10px;
+            font-size: 12px;
         }
 
         /* Footer */
         .footer {
-            margin-top: 30px;
+            margin-top: 20px;
             color: #2c3e50;
-            font-size: 14px;
+            font-size: 12px;
             text-align: center;
         }
 
         .footer img {
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             margin-bottom: 10px;
         }
 
@@ -109,6 +112,30 @@
 
         .footer span {
             font-weight: bold;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header h2 {
+                font-size: 18px;
+            }
+
+            .header h3 {
+                font-size: 12px;
+            }
+
+            .login-container {
+                padding: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
