@@ -68,6 +68,7 @@
         let availableQuestions = [];
         let currentQuestionIndex = 0;
         let totalQuestionsToRun = 0;
+        let questionTimer;
 
         // Fetch questions from JSON file
         fetch('./questions.json')
@@ -124,11 +125,21 @@
                 const question = availableQuestions[currentQuestionIndex];
                 document.getElementById('question-container').innerText = 
                     `${currentQuestionIndex + 1}) Question ${question.number}: ${question.text}`;
+                
+                resetTimer();
             } else {
                 document.getElementById('question-container').innerText = 
                     `${totalQuestionsToRun} questions completed!`;
                 document.getElementById('next-btn').style.display = 'none';
+                clearTimeout(questionTimer);
             }
+        }
+
+        function resetTimer() {
+            clearTimeout(questionTimer);
+            questionTimer = setTimeout(() => {
+                nextQuestion(); // Automatically move to the next question after 20 seconds
+            }, 20000); // 20 seconds timer
         }
 
         function nextQuestion() {
