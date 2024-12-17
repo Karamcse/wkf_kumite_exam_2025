@@ -33,42 +33,44 @@
     <button onclick="nextQuestion()">Next Question</button>
 
     <script>
-        let questions = [];
-        let availableQuestions = [];
-        let currentQuestionIndex = 0;
+    let questions = [];
+    const excludeList = [1, 3, 5]; // Question numbers to exclude
+    let availableQuestions = [];
+    let currentQuestionIndex = 0;
 
-        // Fetch questions from the JSON file
-        fetch('questions.json')
-            .then(response => response.json())
-            .then(data => {
-                questions = data;
-                shuffleQuestions();
-                showQuestion();
-            })
-            .catch(error => {
-                console.error('Error loading questions:', error);
-                document.getElementById('question-container').innerText = 'Failed to load questions!';
-            });
-
-        // Shuffle questions randomly
-        function shuffleQuestions() {
-            availableQuestions = questions.sort(() => Math.random() - 0.5);
-        }
-
-        function showQuestion() {
-            if (currentQuestionIndex < availableQuestions.length) {
-                const question = availableQuestions[currentQuestionIndex];
-                document.getElementById('question-container').innerText = 
-                    `Question ${question.number}: ${question.text}`;
-            } else {
-                document.getElementById('question-container').innerText = 'No more questions!';
-            }
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
+    // Fetch questions from JSON file
+    fetch('./questions.json')
+        .then(response => response.json())
+        .then(data => {
+            questions = data;
+            // Filter out excluded questions
+            availableQuestions = questions.filter(q => !excludeList.includes(q.number));
+            shuffleQuestions(); // Randomize questions
             showQuestion();
+        })
+        .catch(error => console.error('Error loading questions:', error));
+
+    function shuffleQuestions() {
+        for (let i = availableQuestions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
         }
+    }
+
+    function showQuestion() {
+        if (currentQuestionIndex < availableQuestions.length) {
+            const question = availableQuestions[currentQuestionIndex];
+            document.getElementById('question-container').innerText = 
+                `Question ${question.number}: ${question.text}`;
+        } else {
+            document.getElementById('question-container').innerText = 'No more questions!';
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        showQuestion();
+    }
     </script>
 </body>
 </html>
