@@ -11,332 +11,54 @@
             margin-top: 50px;
         }
         #question-container {
-            font-size: 75px;
+            font-size: 24px;
             margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="question-container"></div>
+    <h1>Kumite Questions</h1>
+    <div id="question-container">Loading...</div>
     <button onclick="nextQuestion()">Next Question</button>
 
     <script>
-        // Array of questions
-        const questions = [
-           {number:1,text:"If the competition area is elevated another meter to a total of 3 meters is required on all sides."},
-{number:2,text:"Any Voluntary religious headwear can be worn."},
-{number:3,text:"The Karate -Gi jacket must be more than three -quarters thigh length."},
-{number:4,text:"The Karate -Gi trousers must cover at least two -thirds of the shin."},
-{number:5,text:"The Karate -Gi jacket sleeve must be no longer than the bend of the wrist."},
-{number:6,text:"If a contestant’s Karate -Gi jacket sleeves are too long and a suitable replacement cannot be found in time the Referee can allow him to turn them up on the inside."},
-{number:7,text:"Competitors may wear 1 or 2 discreet rubber band or ponytail retainer in their hair. Ribbons, beads and other decorations are prohibited ."},
-{number:8,text:"Earrings are allowed if they are covered with tape ."},
-{number:9,text:"Metallic teeth (dental) braces may be worn at the contestant’s own risk if approved by the Referee and the Official Doctor."},
-{number:10,text:"Contestants must bow properly to each other at the start and end of the bout ."},
-{number:11,text:"The coach may change the team fighting order during a round."},
-{number:12,text:"If a contestant is injured in an individual match the coach can enter a replacement if he notifies the Organising Commission first."},
-{number:13,text:"Each Judge must be equipped with a red and a blue flag or electronic signal device ."},
-{number:14,text:"If two teams have the same number of victories and points, a deciding bout will be held."},
-{number:15,text:"The Match Supervisor (KANSA) will be equipped with only a whistle . World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 3/17"},
-{number:16,text:"Disqualification by KIKEN means that the contestants are disqualified from that category ."},
-{number:17,text:"Heels of more than 4 cm may not be worn with the uniform ."},
-{number:18,text:"Senior Male bouts are three minutes, and Women, Cadets, and Juniors, two minutes."},
-{number:19,text:"Kumite team members may wear any type of Karate Gi."},
-{number:20,text:"Different type of stripes may be used for team members ."},
-{number:21,text:"A competitor does not need to change the jacket if ties are torn off during the match."},
-{number:22,text:"Competitors may wear any white Karate Gi."},
-{number:23,text:"A fast combination of CHUDAN Geri and TSUKI each of which score in their own right will be given IPPON."},
-{number:24,text:"In Senior matches a light “glo ve touch” to the throat need no result in a warning or penalty provided there is no actual injury."},
-{number:25,text:"A kick in the groin will not result in a penalty provided the offender did not do it intentionally."},
-{number:26,text:"Starting 2023, for Competitors under 14 years of age , the WKF approved protective helmet is allowed and compulsory from 1.1.2024 ."},
-{number:27,text:"If SENSHU is wi thdrawn when it is less tha n 15 seconds left of the bout, no further SENSHU  can be  awarded to either competitor."},
-{number:28,text:"Should a competi tor that has been awarded SENSHU receives a warning for avoiding combat when there is less than  15 seconds left of the bout – the competitor will automat ically forfeit this advantage."},
-{number:29,text:"Voluntary religiously headwear must be approved by the WKF ."},
-{number:30,text:"The WKF Competition Supervisor, or the Organizing Commission, can allow Coaches to instead of the track suit top to use any t -shirt ."},
-{number:31,text:"HANSOKU -CHUI is given when the contestant’s potential for winning has been seriously reduced by the opponent’s foul."},
-{number:32,text:"An “exchange” is the period preceding when the bout is halted, and the clock stopped ."},
-{number:33,text:"The weight tolerance admitted for male and female 0.5 kg ."},
-{number:34,text:"HANSOKU is imposed for serious rules infractions."},
-{number:35,text:"SHIKKAKU can only be imposed after a warning has been given . World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 4/17"},
-{number:36,text:"If a contestant acts maliciously, SHIKKAKU and not HANSOKU is the correct penalty."},
-{number:37,text:"If a contestant acts maliciously, H ANSOKU is the correct penalty."},
-{number:38,text:"A competitor can be given SHIKKAKU if the behaviour of the coach or non - combatant members of the contestant’s delegation is considered to harm the prestige and honour of Karate -do."},
-{number:39,text:"The same tolerance applies to both the upper and lower limits of a weight class ."},
-{number:40,text:"For individual competition, the Round -robin system followed by quarterfinals, semi -finals and final is applied ."},
-{number:41,text:"There are five criteria to be met in determining a score."},
-{number:42,text:"A male team must present minimum five competitors for the initial round ."},
-{number:43,text:"Male teams comprise five to seven members with five competing in a round ."},
-{number:44,text:"A female team must present minimum two competitors for the initial round ."},
-{number:45,text:"The maximum 32 Competitors per category are divided in 8 groups of 4 Competitors in the Round -robin system ."},
-{number:46,text:"If the coach continues to interfere after first warning, the Referee will stop the bout, approach the coach again and as k him/her to leave the tatami."},
-{number:47,text:"If AKA scores just as AO steps outside of the match area, both the score and warning or penalty can be given ."},
-{number:48,text:"If a contestant has been physically propelled from the area, Jogai will be giv en."},
-{number:49,text:"In Premier League competition the losers to the finalists in the quarter - and semi -finals compete for the bronze medals ."},
-{number:50,text:"In cases where there is a tie between two or more Competitors in a group, having the same number of total points, the first criteria to consider is the highest World Ranking at the date of the competition ."},
-{number:51,text:"It is possible for a Competitor to be disqualified from a bout (HANSOKU) and continue the competition ."},
-{number:52,text:"A contestant who scores and exits the area before the Referee calls YAME will not receive  JOGAI ."},
-{number:53,text:"Contestants cannot be given penalties after the time -up bell has signalled the end of a bout."},
-{number:54,text:"In Junior competition any technique to the face, head or neck, which causes injury will be warned or penalised  unless it is the recipient’s own fault .  World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 5/17"},
-{number:55,text:"In Cadet and Junior competition Jodan kicks are allowed to make the lightest touch  (“skin touch” ) provided there is no injury."},
-{number:56,text:"In Senior competition a light touch is allowed for JODAN punches, and a greater tolerance is allowed for JODAN  kicks."},
-{number:57,text:"An already qualified Competitor cannot be disqualified for misconduct (SHIKKAKU) at the end of the Round -robin ."},
-{number:58,text:"If a variation of the competition format other than described in these rules is to be applied for a particular tournament, this has to be clearly announced in the tournament bulletin ."},
-{number:59,text:"A bad behaviour from a coach does not cause a S HIKKAKU to his/her competitor and the competitor does not need to be expelled from the match/bout."},
-{number:60,text:"When the Judges see a score, they will immediately signal with joy sticks ."},
-{number:61,text:"The referee panel is composed of 1 Tatami Manager, 3 Tatami Manager Assistants ."},
-{number:62,text:"The Referee Panel for each match shall consist of one Referee, four Judges and one Match Supervisor."},
-{number:63,text:"If after the bout has started a contestant is found not to be wearing a gum -shield the contestant will be disqualified."},
-{number:64,text:"The Referee will give all commands and make all announcements."},
-{number:65,text:"Duration of the Kumite bout is: 1.5 minutes for under 14 years and younger ."},
-{number:66,text:"If three Judges signal a score for AKA, the Referee must stop the bout even if he believes they are mistaken."},
-{number:67,text:"If two or more Judges signal a score for the same competitor the Referee must stop the bout."},
-{number:68,text:"The timing of a bout starts when the Referee gives the signal to start and stops when the Referee calls “ YAME ” or when the time is  up."},
-{number:69,text:"The Referee Panel of a K umite match shall consist of a Referee, four Judges, a Match Supervisor and a Score Keeper ."},
-{number:70,text:"When a competitor slips and falls with the torso not touching the Tatami and is immediately scored upon the opponent will be awarded Ippon ."},
-{number:71,text:"The competitor’s coach or its official representative are the only o nes allowed to make a protest."},
-{number:72,text:"If the Referee does not hear the time -up signal the Match Supervisor will blow the whistle.   World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 6/17"},
-{number:73,text:"The Competitors only must bow properly to each other at the start of the bout ."},
-{number:74,text:"In individual matches a contestant who withdraws voluntarily from the bout is declared KIKEN  and an extra eight points are awarded to the opponent."},
-{number:75,text:"Awareness is the state of continued commitment, which endures after the technique has landed."},
-{number:76,text:"If the organizer has a check -up of equipment before line -up, it is still KANSA´S responsibility to ensure that the equipment is in accordance with the rules ."},
-{number:77,text:"A contestant who stays within the match area may score on a contestant outside the match area."},
-{number:78,text:"ATOSHI BARAKU means “ 15 seconds of bout time remaining”."},
-{number:79,text:"ATOSHI BARAKU means “1 0 seconds of bout time remaining”."},
-{number:80,text:"A “skin touch” to the throat is allowed only in Senior competition."},
-{number:81,text:"If there are no points at the end of a bout in team matches the Referee will call for HANTEI."},
-{number:82,text:"Excessive contact after r epeated failure to block is a consideration for MUBOBI."},
-{number:83,text:"A contestant may be penalised for exaggeration even when there is an actual injury."},
-{number:84,text:"The Referee declare the winner; “AO (AKA) NO KACHI”, and if necessary, break the tie in case of HANTEI ."},
-{number:85,text:"In the event of a tied score at the end of an inconclusive bout the Referee Panel (the Referee and the four Judges) will decide the bout by HANTEI ."},
-{number:86,text:"When the Referee Panel has made a decision not in accordance with the Rules of Competition, the Match Supervisor (KANSA) will immediately  blow his whistle ."},
-{number:87,text:"A competitor should not be penalized for being winded (loss of breath as a consequence of a technique) or simply reacting to an impact even if the technique merited a point by the opponent ."},
-{number:88,text:"In team matches there is no extra bout ."},
-{number:89,text:"Only the first correctly executed technique of a combination will score ."},
-{number:90,text:"Competitors that appear at the competition area with unauthorized equipment or irregular Karate -Gi will be given one minute to correct the attire ."},
-{number:91,text:"Competitors that are winded as a result of an impact should be allowed time to catch their brea th before the bout is resumed."},
-{number:92,text:"JODAN is described as the shoulders and the area above the collar bone . World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 7/17"},
-{number:93,text:"IPPON is awarded for JODAN kicks or any techniques against an opponent whose any part of the body other than the feet is in contact with the TATAMI."},
-{number:94,text:"HANSOKU CHUI will be given for feigning of injury."},
-{number:95,text:"HANSOKU will be given for the first instance of exaggerating an injury."},
-{number:96,text:"A loss of breath by the recipient of a blow after receiving a CHUDAN technique does indicate lack of control ."},
-{number:97,text:"A competitor can be given Hansoku directly for exaggerating the effects of injury ."},
-{number:98,text:"A technique even if effective, delivered after an order to suspend or halt the bout shall not be scored an d may result in a penalty being imposed on the offender ."},
-{number:99,text:"In Cadet Kumite JODAN kicks are allowed to make a “skin touch” provided there is no injury."},
-{number:100,text:"Before the start of a match or bout the Tatami Manager should examine the competitor’s medical card."},
-{number:101,text:"If there is an error in charting and the wrong contestants compete this cannot be changed afterwards."},
-{number:102,text:"An effective technique delivered at the same time as the end of the bout is signalled by the buzzer is valid."},
-{number:103,text:"If a contestant is injured and it is considered to be their own fault (MUBOBI ), the Referee will decline to give a warning or penalty to the opponent."},
-{number:104,text:"KANSA has no vote or authority in matters of judgments such as whether a score was valid or not ."},
-{number:105,text:"YUKO is always awarded for punches on the back ."},
-{number:106,text:"“Skin touch” is allowed in categories for Competitors 16 years or older ."},
-{number:107,text:"A contestant who does not obey the Referee's orders will be given SHIKKAKU ."},
-{number:108,text:"The Score Supervisor will order the Referee to halt the match when he sees a contravention of the Rules of Competition."},
-{number:109,text:"If in a combination, the first technique merits a YUKO and the second merits a penalty, both shall be given."},
-{number:110,text:"Skin touch is defined as touching the target without transferring energy into the head or body ."},
-{number:111,text:"It is not possible to score while lying on the floor."},
-{number:112,text:"A competitor not wearing the WKF approved equipment will be given two minute s to change for the approved type.   World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 8/17"},
-{number:113,text:"A contestant injured in K umite and withdrawn under the ten -second rule may not compete in the Kata competition."},
-{number:114,text:"An injured contestant who has been declared unfit to fight by the Tournament Doctor cannot fight again in that competition."},
-{number:115,text:"If a competitor behaves badly on the competition area after the end of the match or bout, the Referee can still give SHIKKAKU ."},
-{number:116,text:"The Match Supervisor has a vote in cases of SHIKKAKU ."},
-{number:117,text:"In Male team matches if a team wins three bouts, then the match is over at that point."},
-{number:118,text:"In Female team matches if a team wins two bouts, then the match is over at that point."},
-{number:119,text:"When a contestant seizes the opponent and does not perform an immediate technique or throw the Referee will call “ YAME ”."},
-{number:120,text:"When a Judge is not sure that a techniqu e actually reached a scoring are a s/he may signal for the score."},
-{number:121,text:"A contestant who commits an act which harms the prestige and honour of Karate -Do will be given HANSOKU ."},
-{number:122,text:"When an action of a contestant is considered to be dangerous and deliberately violates the rules concerning prohibited behaviour, the contestant will be given Shikkaku."},
-{number:123,text:"Correctly executed techniques executed after the time -up signal are valid ."},
-{number:124,text:"Correctly executed techniques executed upon or after “WAKARETE” are valid ."},
-{number:125,text:"A point may be signaled even if the Judge cannot see the actual point of impact ."},
-{number:126,text:"At HANTEI if three Judges signal victory for AKA and the fourth Judge signal s victory for AO, the Referee  must give victory for AKA ."},
-{number:127,text:"Passivity cannot be given to someone having a lead by point or SENSHU ."},
-{number:128,text:"Only the Coach designated for the specific bout is allowed to coach and guide the competitor from the place allocated to the coach close to the competition area ."},
-{number:129,text:"If a contestant does not regain his or her feet within ten seconds, the Referee will announce “ KIKEN ” and “ KACHI ” to the opponent.   World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 9/17"},
-{number:130,text:"If a competitor is thrown and lands partly outside the match area, the Referee will immediately call “ YAME ”."},
-{number:131,text:"The Competitor may not signal to the Coach the wish for him/her to request a video review ."},
-{number:132,text:"The contestants should be examined outside the t atami."},
-{number:133,text:"KANSA has to blow the whistle if the Judge s are holding the joy stick s in the wrong hand s."},
-{number:134,text:"Gum -shields (mouth guards) are obligatory for all Kumite contestants."},
-{number:135,text:"After a throw the Referee will allow a maximum of two seconds for a score to be made."},
-{number:136,text:"If a competitor scores with a strong side kick and propels the opponent out of the area, the Referee should award WAZA -ARI and give the opponent a warning or penalty for Jogai."},
-{number:137,text:"When an official protest is lodged the ensuing matches must be delayed until the result of the protest is given."},
-{number:138,text:"Each Judge will be seated in th e corners of the TATAMI."},
-{number:139,text:"When the Referee awards a point for a technique which has caused injury the Match Supervisor  should signal for the match to be stopped."},
-{number:140,text:"When the Referee fails to hear the “time -up” bell the Scorekeeper should blow his whistle."},
-{number:141,text:"WAKARETE for breaking up a clinch can be given at any time of the bout ."},
-{number:142,text:"When the Referee wants to give SHIKKAKU she/he may call the Judges for a brief consultation."},
-{number:143,text:"When a competitor is injured during a bout in progress and needs medical treatment three minutes will be given in which to receive it, after that the Referee will decide whether the competitor will be declared unfit to fight or whether more time will be given."},
-{number:144,text:"A contestant who exits the area ( JOGAI ) with less than 15 seconds of bout time remaining will be given a minimum of CHUI ."},
-{number:145,text:"To correct a score given to the wrong contestant the Referee should turn towards the contestant given the score in error, make the sign of TORIMASEN , and then give the score to the opponent."},
-{number:146,text:"If a competitor scores with a well -controlled CHUDAN Geri, then accidentally punches his opponent in the face causing a slight injury, WAZA -ARI and a warning should be given.   World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 10/17"},
-{number:147,text:"When an injured contestant has been given medical treatment and the Official Doctor says that the contestant can continue fighting the Referee cannot over - rule the Doctor's decision."},
-{number:148,text:"The Referee can stop the bout even if the Judges do not signal."},
-{number:149,text:"Once WAKARETE is called by the Referee the Coaches do not have the opportunity to make a video request ."},
-{number:150,text:"“Avoiding Combat” refers to a situation where a contestant attempts to prevent the opponent from having the opportunity to scor e by using time wasting behaviour ."},
-{number:151,text:"TSUZUKTETE, unless preceded by WAKARETE, is not used if there is less than 15 seconds left of the bout ."},
-{number:152,text:"In team matches if two contestants injure each other and cannot continue and the points score is equal the Referee will announce HIKIWAKE ."},
-{number:153,text:"When there are less than 15 seconds of bout time remaining and a losing competitor, desperately trying to equalise, exits the area ( JOGAI ) they will be given a minimum of HANSOKU -CHUI ."},
-{number:154,text:"Techniques which land below the belt cannot score."},
-{number:155,text:"Techniques, which land on the shoulder blade, can score."},
-{number:156,text:"If AKA accidentally kicks AO on the hip and AO cannot continue the bout, then AO will be given KIKEN ."},
-{number:157,text:"If a contest ant is obviously out of breath due to lack of endu rance, he Referee should stop the match to give him time to recover."},
-{number:158,text:"A contestant who establishes a clear lead of eight points is declared the winner."},
-{number:159,text:"When time is up ; the contestant who has scored the most points is declared the winner."},
-{number:160,text:"An otherwise correctly executed technique will be penalized if executed at the same time as WAKARETE has been called ."},
-{number:161,text:"There are two degrees of official warnings ."},
-{number:162,text:"CHUI is given, up to three times, for smaller infractions ."},
-{number:163,text:"HANSOKU CHUI cannot be given if three CHUI has not already been given ."},
-{number:164,text:"A warning or penalty for MUBOBI is only given when a competitor is hit or injured through his own fault or negligence.   World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 11/17"},
-{number:165,text:"A competitor who is hit through their own fault and exaggerates the effect should receive a warning or penalty for MUBOBI  or exaggeration but not both."},
-{number:166,text:"If a competitor makes a good CHUDAN kick and the opponent catches the leg a score cannot be given."},
-{number:167,text:"A competitor makes a JODAN kick with all six scoring criteria. The opponent puts his hand up to intercept the kick and the hand then lightly hits his own face ; the Referee can give  IPPON since the kick was not effectively blocked."},
-{number:168,text:"A male team can compete with only two competitors."},
-{number:169,text:"Authorised advertising for WKF is displayed on the left sleeve of the Karate -Gi."},
-{number:170,text:"National Federations are not allowed to put advertising on the competitor’s Karate -Gi."},
-{number:171,text:"A Kumite competitor who receives KIKEN cannot compete again in that tournament."},
-{number:172,text:"An extra bout is used only for team matches."},
-{number:173,text:"KANSA needs to blow the whistle if the Referee gives a score to a competi tor and MUBOBI  to the other."},
-{number:174,text:"Serious violation of conduct, discipline, or malicious behavior merits a HANSOKU CHUI ."},
-{number:175,text:"In international competitions t he Referee must not have the same nationality as either of the competitors although one of the Judges can if both coaches agree."},
-{number:176,text:"The Match Supervisor (KANSA) will line up together with the Referee and the Judges."},
-{number:177,text:"The coaches will be seated outside the safety area, on their respective sides facing  towards the official table."},
-{number:178,text:"KANSA does not need to interfere if the Referee gives a score to a competitor and exagg eration to the other."},
-{number:179,text:"In team matches the Panel will rotate for each bout - provided that all hold the required license."},
-{number:180,text:"In team matches the Panel will rotate for each bout only in bouts for medals."},
-{number:181,text:"The Ref eree can move about the entire t atami including the safety zones."},
-{number:182,text:"Female competitors must have chest protector."},
-{number:183,text:"Female compet itors don’t have to have chest p rotector if they have body protector."},
-{number:184,text:"The red and blue belts must be without any personal embroideries or markings . World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 12/17"},
-{number:185,text:"When a situation appears to possibly warrant a disqualification the Referee can call one or more of judges for a brief consultation ( FUKUSHIN SHUGO) before announcing any decision ."},
-{number:186,text:"Contestants must wear a white Karat e-Gi without personal embroider y."},
-{number:187,text:"Personal embroider y in the Karate -Gi is allowed only in bouts for medals."},
-{number:188,text:"Where contact is considered by the Referee to be too strong, but does not diminish the Competitor’s chances of winning, a warning (CHUI) can be given ."},
-{number:189,text:"Any technique, which results in injury, unless caused by the recipient cause a warning or penalty ."},
-{number:190,text:"An obvious overreaction to a contact will receive a CHUI ."},
-{number:191,text:"Judges cannot indicate a score or warning before the Referee stops the bout."},
-{number:192,text:"An obvious display of exaggeration will receive a HANSOKU ."},
-{number:193,text:"Any instance of feigning an injury, whoever slight, will receive a minimum warning of CHUI ."},
-{number:194,text:"An obvious display of any feigning such as staggering around, falling on the floor, standing up and falling down again, and so on, will receive SHIKKAKU directly ."},
-{number:195,text:"Any feigning of an injury from a technique that in fact have been determined by the judges as a point will as a minimum result in HANSOKU CHUI ."},
-{number:196,text:"If a contestant scores with more than one consecutive technique before YAME , the Judges must show the higher point regardless of  which sequence the techniques scored ."},
-{number:197,text:"In team matches, if after the extra bout there are no scores, or it is equal scores with no SENSHU , the match will be decided by HANTEI ."},
-{number:198,text:"JOGAI occurs when a contestant exits from the competition area, and it is not caused by the opponent."},
-{number:199,text:"The minimum warning for running away, avoiding combat or/and wasting time during ATOSHI BARAKU is HANSOKU CHUI ."},
-{number:200,text:"The pivotal point of the throw must not be above the thrower’s hip level and the opponent must be held onto throughout, so that a safe landing can be made ."},
-{number:201,text:"Holding on to the opponent’s Karate Gi is not permitted to break a fall ."},
-{number:202,text:"KANSA does not need to interfere if the Referee gives a score for a technique done after the time is up."},
-{number:203,text:"YUKO is worth one point. World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 13/17"},
-{number:204,text:"WAZA -ARI is worth two points ."},
-{number:205,text:"IPPON is worth three points ."},
-{number:206,text:"It is the duty of the Match Supervisor to ensure before each match or bout that the competitors are wearing the approved equipment."},
-{number:207,text:"It is the duty of the Tatami Manager to ensure before each match or bout that the competitors are wearing the approved equipment."},
-{number:208,text:"Coaches must present their accreditation together with that of their competitor or team to the official table ."},
-{number:209,text:"WAZA -ARI is awarded for CHUDAN Kicks."},
-{number:210,text:"YUKO is awarded for any TSUKI or UCHI delivered to any of the seven scoring areas  against a competitor that is standing up or off his/her feet and the torso is not on the mat."},
-{number:211,text:"IPPON is awarded for JODAN GERI and scoring techniques which are delivered on an opponent who has been thrown, has fallen of their own accord, or is otherwise off their feet ."},
-{number:212,text:"Individual bouts can not be declared a tie."},
-{number:213,text:"Passivity can be given to any Competitor at any time ."},
-{number:214,text:"Passivity cannot be given during the first 15 seconds of a bout ."},
-{number:215,text:"Simulated attacks with the head, knees, or elbows are offense s."},
-{number:216,text:"Avoiding combat during the last 15 seconds of the bout (ATO SHIBARAKU) will as a minimum result in HANSOKU CHUI and loss of SENSHU ."},
-{number:217,text:"The Head Coach of a delegation can protest about a judgment to the members of the Refereeing Panel."},
-{number:218,text:"In a Kumite Tatami two mats are inverted with the red side turned up in a one meter distance from the mat centre to form a boundary between the contestants."},
-{number:219,text:"Jacket ties must be tied ."},
-{number:220,text:"At the beginning of a bout Jackets without ties can be used."},
-{number:221,text:"In individual competition a contestant may be replaced by another after the drawing has taking place."},
-{number:222,text:"At medal bouts male coaches are required to wear a dark suit, shirt and tie."},
-{number:223,text:"At medal bouts female coaches may choose to wear a dress, pantsuit or a combination of jacket and skirt in dark colours."},
-{number:224,text:"At medal bouts female coaches cannot wear religious headwear. World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 14/17"},
-{number:225,text:"A Competitor that refuses following the instructions of the Referee or display a loss of temper will automatically receive HANSOKU ."},
-{number:226,text:"Competitors are not entitled to a period of time between matches, equal to the standard duration time of the match, for purpose of rest."},
-{number:227,text:"Passivity cannot be g iven after less than the last 15 seconds of the match."},
-{number:228,text:"Any excessive celebration, such as falling on one’s knees etc., political, or religious expressions, during or immediately after the bout or match, are prohibited and may be subject to a fine equal to the protest fee determined by EC"},
-{number:229,text:"If a Competitor receives KIKEN, or SHIKKAKU, in Round -robin competition all previous bouts are voided from the result."},
-{number:230,text:"Grabbing the opponent’s arm or Karat e-GI with one hand is only allowed for attempting  an immediately scoring technique or takedown."},
-{number:231,text:"Grabbing the opponen t with both hands is never allowed during the match."},
-{number:232,text:"It is the Tatami Manager’s duty to appoint the video review supervisor ."},
-{number:233,text:"Should the number of IPPON and WAZA ARI be equal, the decision will be by HANTEI ."},
-{number:234,text:"In any individual bout, with equal score, and no SENSHU by either Competitor, the first criteria of the decision will be made based on the higher number of IPPON  scored in the bout ."},
-{number:235,text:"If one Competitor has a score indicated by more than one Judge and the score is different between the Judges, the higher will be applied ."},
-{number:236,text:"The Tatami Manager must notify the central table when a Competitor has been stopped from further competition based on the 10 -second rule ."},
-{number:237,text:"The timekeeper is responsible of starting the 3 -minute count for a Competitor who is injured during a bout in progress and requires medical treatment."},
-{number:238,text:"The Referee will call YAME when a contestant seizes the opponent and does not perform  an immediate technique or throw."},
-{number:239,text:"The Referee indicates the winner by hand signal and the order (AKA/AO NO KACHI), and by this action also resolve any tie ."},
-{number:240,text:"When a contestant seizes the opponent, the Referee will give several seconds for the contestant to perform a throw or technique."},
-{number:241,text:"The Coach / NF representative will request the official protest from the Tatami Manager . World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 15/17"},
-{number:242,text:"The Referee can stop the match and give a point without the Judges opinion."},
-{number:243,text:"If the referee does not call the doctor in a 10 second rule situation, Kansa must blow  the w histle ."},
-{number:244,text:"The winning team is the one with the most bout victori es excluding those won by SENSHU ."},
-{number:245,text:"The red and blue belts must be no longer than three -quarters thigh length."},
-{number:246,text:"Failure of a Coach / NF representative to deliver a protest in a timely manner can lead to its rejection ."},
-{number:247,text:"The correct penalty for feigning an injury when the judges have determined that the technique in fact was a score is HANSOKU ."},
-{number:248,text:"The information of officials implicated in the protest is completed by the Tatami Manager ."},
-{number:249,text:"Disqualification by KIKEN means that the contestants are disqualified from that category, although it does not affect participation in another category."},
-{number:250,text:"Competitors are entitled to a rest period of time between matches, equal to the standard duration time of the match. The exception is in the case of change of equipment color, where this time is extended to five minutes."},
-{number:251,text:"In any bout, if after full time the scores are equal, b ut one contestant has obtained “first un opposed score advantage” ( SENSHU ), that contestant will be declared the winner."},
-{number:252,text:"By “ first un opposed score advantage” ( SENSHU ) is understood that one contestant has achieved the first instance of scoring on the opponent without having the opponent also score before the signal."},
-{number:253,text:"Where both contestan ts score before the signal, no “first unopposed score advantage”  is awarded and both contestants retain the possibility of SENSHU later in the bout."},
-{number:254,text:"In the event that a competitor falls, is thrown, or knocked down and does not regain his or her feet immediately, the Referee will call the doctor, and at the same time start a count to ten indicating his count showing a finger for each second."},
-{number:255,text:"An audible signal will be given by the timekeeper 15 seconds before the actual end of the bout and the Referee will announce “ ATOSHI BARAKU”."},
-{number:256,text:"Kansa must remain silent if the referee gives a warning or penalty for p assivity during ATOSHI BARAKU."},
-{number:257,text:"In individu al categories a bout can be declared a tie. World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 16/17"},
-{number:258,text:"For all competition system the Coach will be allowed one video review card for the athlete ."},
-{number:259,text:"For Round -robin in groups of four the Coach will be allowed one VR card for each participant in the round -robin phase."},
-{number:260,text:"The Competitor may ask the Coach to request a video review discretely."},
-{number:261,text:"The video review can be requested by the Coach in instances where the Judges awarded a lower score than, in the opinion of the Coach, should be for a higher scoring technique."},
-{number:262,text:"The Video Review Supervisor may only award points if scoring before or simultaneously with the other Competitor."},
-{number:263,text:"The last 6 seconds before the bout was stopped for the request will always be evaluated for Video Review."},
-{number:264,text:"If both Coaches requests video review at the same time, the Video Supervisor may only award the point to whoever is deemed to score first."},
-{number:265,text:"Simultaneous scoring techniques can be awarded to both Competitors in Video Review."},
-{number:266,text:"The Video Review Supervisor may not overrule any decision by the corner judges with the exception of SENSHU."},
-{number:267,text:"Tatami manager must supervise that KANSA stops the bout to instruct the Referee regarding a contravention of the Rules of Competition."},
-{number:268,text:"Referee indicates fouls observed, and impose warning and penalties as required by the rules."},
-{number:269,text:"Referee breaks the tie in case of HANTEI."},
-{number:270,text:"it is always KANSA´ S responsibility to ensure that the equipment is in accordance with the rules before each bout ."},
-{number:271,text:"In the event that the Referee does not hear the time -up bell, KANSA will blow his whistle."},
-{number:272,text:"In two judging system, the Corner Judges will assist the Referee by giving signals for JOGAI, excessive contact, and skin touch for categories where this contravenes the rules. World Karate Federation    Kumite Examination Questions.  Version  1st January 20 24 17/17"},
-{number:273,text:"In two judging system, the Referee remain autonomous in applying warnings and penalties."},
-{number:274,text:"In two judging system, if the two Judges, or one Judge and the Referee, show different points for the same competitors, the higher will be given."},
-{number:275,text:"In two judging system, if the two Judges, or one Judge and the Referee show different warnings for the same competitor, the lower will be given."}
-            // Add more questions here
-        ];
+        let questions = [];
+        const excludeList = [1, 3, 5]; // Example: Questions to exclude (update as needed)
+        let availableQuestions = [];
+        let currentQuestionIndex = 0;
 
-        // List of question numbers to exclude
-        const excludeList = [47,159,194,46,144,103,244,140,142,120,201,121,56,67,5,169,187,198,148,84,28,106,
-        133,267,167,239,2,205,186,248,29,152,221,8,233,154,17,271,13,63,240,132,36,8,176,49,237,92,217,273,17,151,158,236,203,21,125,123,129,187,46,274,147,160,103,28,218,81,71,141,75,224,32,235,101,220,27,
-        131,259,197,24,250,119,172,105,6,20,147,88,69,136,215,193,14,57,16,192,261,239];
-
-        // Filter out questions in the excludeList
-        let availableQuestions = questions.filter(question => !excludeList.includes(question.number));
-        let interval;
+        // Fetch questions from the JSON file
+        fetch('questions.json')
+            .then(response => response.json())
+            .then(data => {
+                questions = data;
+                // Filter out excluded questions
+                availableQuestions = questions.filter(q => !excludeList.includes(q.number));
+                showQuestion();
+            })
+            .catch(error => {
+                console.error('Error loading questions:', error);
+                document.getElementById('question-container').innerText = 'Failed to load questions!';
+            });
 
         function showQuestion() {
-            if (availableQuestions.length > 0) {
-                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-                const question = availableQuestions[randomIndex];
+            if (currentQuestionIndex < availableQuestions.length) {
+                const question = availableQuestions[currentQuestionIndex];
                 document.getElementById('question-container').innerText = `Question ${question.number}: ${question.text}`;
-                availableQuestions.splice(randomIndex, 1);
-                interval = setTimeout(showQuestion, 20000); // Show next question after 12 seconds
             } else {
                 document.getElementById('question-container').innerText = 'No more questions!';
             }
         }
 
         function nextQuestion() {
-            clearTimeout(interval);
-            if (availableQuestions.length > 0) {
-                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-                const question = availableQuestions[randomIndex];
-                document.getElementById('question-container').innerText = `Question ${question.number}: ${question.text}`;
-                availableQuestions.splice(randomIndex, 1);
-                interval = setTimeout(showQuestion, 20000); // Show next question after 12 seconds
-            } else {
-                document.getElementById('question-container').innerText = 'No more questions!';
-            }
+            currentQuestionIndex++;
+            showQuestion();
         }
-
-        // Start showing questions
-        showQuestion();
     </script>
 </body>
 </html>
