@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter Username" />
+        <input type="password" id="password" placeholder="Enter Password" />
+        <button onclick="checkCredentials()">Login</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <script>
+        let correctUsername = '';
+        let correctPassword = '';
+
+        // Fetch the credentials from credentials.json
+        fetch('credentials.json')
+            .then(response => response.json())
+            .then(data => {
+                correctUsername = data.username;
+                correctPassword = data.password;
+            })
+            .catch(error => {
+                console.error('Error loading credentials:', error);
+                document.getElementById('error-message').innerText = 'Error loading credentials!';
+            });
+
+        function checkCredentials() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Compare input with fetched credentials
+            if (username === correctUsername && password === correctPassword) {
+                localStorage.setItem('authenticated', 'true');
+                window.location.href = 'index.html'; // Redirect to the main page
+            } else {
+                document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
+            }
+        }
+    </script>
+</body>
+</html>
