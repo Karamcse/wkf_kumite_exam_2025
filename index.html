@@ -3,24 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>WKF Karate Federation - Login</title>
     <style>
+        /* General Page Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #007bff, #00c6ff);
+            color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
+            text-align: center;
         }
+
+        /* Header */
+        .header {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin: 10px 0;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            margin: 5px 0;
+            font-weight: normal;
+        }
+
+        .header h3 {
+            font-size: 16px;
+            margin: 5px 0;
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        /* Login Container */
         .login-container {
             background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            width: 320px;
             text-align: center;
         }
+
+        .login-container h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
         input {
             padding: 10px;
             margin: 10px 0;
@@ -28,30 +66,83 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         button {
-            padding: 10px 20px;
+            padding: 10px;
+            width: 100%;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .footer img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer span {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <div class="header">
+        <h1>WKF KARATE FEDERATION</h1>
+        <h2>Kumite Competition</h2>
+        <h3>Examination Questions for Kumite Referees and Judges</h3>
+    </div>
+
+    <!-- Login Container -->
     <div class="login-container">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Enter Username" />
         <input type="password" id="password" placeholder="Enter Password" />
         <button onclick="checkCredentials()">Login</button>
-        <p id="error-message" style="color: red;"></p>
+        <p id="error-message"></p>
     </div>
 
+    <!-- Footer with Organizer Info -->
+    <div class="footer">
+        <img src="images/organizer.jpeg" alt="Organizer Photo" />
+        <p>Organised by</p>
+        <p><span>Karamchand Gandhi</span></p>
+        <p>Puducherry State Representative - Shobukai Shito Ryu Karate Federation</p>
+        <p>AKF Kata and Kumite Judge</p>
+    </div>
+
+    <!-- JavaScript -->
     <script>
         let correctUsername = '';
         let correctPassword = '';
 
-        // Fetch the credentials from credentials.json
+        // Fetch credentials from credentials.json
         fetch('./credentials.json')
             .then(response => response.json())
             .then(data => {
@@ -67,10 +158,9 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Compare input with fetched credentials
             if (username === correctUsername && password === correctPassword) {
                 localStorage.setItem('authenticated', 'true');
-                window.location.href = 'questions.html'; // Redirect to main page
+                window.location.href = 'questions.html'; // Redirect to questions page
             } else {
                 document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
             }
