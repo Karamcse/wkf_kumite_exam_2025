@@ -138,33 +138,36 @@
     </div>
 
     <!-- JavaScript -->
-    <script>
-        let correctUsername = '';
-        let correctPassword = '';
+<script>
+    let credentials = []; // Array to store multiple credentials
 
-        // Fetch credentials from credentials.json
-        fetch('./credentials.json')
-            .then(response => response.json())
-            .then(data => {
-                correctUsername = data.username;
-                correctPassword = data.password;
-            })
-            .catch(error => {
-                console.error('Error loading credentials:', error);
-                document.getElementById('error-message').innerText = 'Error loading credentials!';
-            });
+    // Fetch the credentials from credentials.json
+    fetch('./credentials.json')
+        .then(response => response.json())
+        .then(data => {
+            credentials = data; // Store the array of credentials
+        })
+        .catch(error => {
+            console.error('Error loading credentials:', error);
+            document.getElementById('error-message').innerText = 'Error loading credentials!';
+        });
 
-        function checkCredentials() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    function checkCredentials() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-            if (username === correctUsername && password === correctPassword) {
-                localStorage.setItem('authenticated', 'true');
-                window.location.href = 'questions.html'; // Redirect to questions page
-            } else {
-                document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
-            }
+        // Check if input matches any username-password pair
+        const isValid = credentials.some(
+            (cred) => cred.username === username && cred.password === password
+        );
+
+        if (isValid) {
+            localStorage.setItem('authenticated', 'true');
+            window.location.href = 'questions.html'; // Redirect to questions page
+        } else {
+            document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
         }
-    </script>
+    }
+</script>
 </body>
 </html>
