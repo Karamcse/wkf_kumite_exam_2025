@@ -3,74 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kumite Questions</title>
+    <title>Login Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
         }
-        #question-container {
-            font-size: 24px;
-            margin-bottom: 20px;
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         button {
             padding: 10px 20px;
-            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
     </style>
-    <script>
-        // Redirect unauthenticated users to the login page
-        if (localStorage.getItem('authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
 </head>
 <body>
-    <h1>Kumite Questions</h1>
-    <div id="question-container">Loading...</div>
-    <button onclick="nextQuestion()">Next Question</button>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter Username" />
+        <input type="password" id="password" placeholder="Enter Password" />
+        <button onclick="checkCredentials()">Login</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
 
     <script>
-    let questions = [];
-    const excludeList = [1, 3, 5]; // Question numbers to exclude
-    let availableQuestions = [];
-    let currentQuestionIndex = 0;
+        let correctUsername = '';
+        let correctPassword = '';
 
-    // Fetch questions from JSON file
-    fetch('./questions.json')
-        .then(response => response.json())
-        .then(data => {
-            questions = data;
-            // Filter out excluded questions
-            availableQuestions = questions.filter(q => !excludeList.includes(q.number));
-            shuffleQuestions(); // Randomize questions
-            showQuestion();
-        })
-        .catch(error => console.error('Error loading questions:', error));
+        // Fetch the credentials from credentials.json
+        fetch('./credentials.json')
+            .then(response => response.json())
+            .then(data => {
+                correctUsername = data.username;
+                correctPassword = data.password;
+            })
+            .catch(error => {
+                console.error('Error loading credentials:', error);
+                document.getElementById('error-message').innerText = 'Error loading credentials!';
+            });
 
-    function shuffleQuestions() {
-        for (let i = availableQuestions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
+        function checkCredentials() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Compare input with fetched credentials
+            if (username === correctUsername && password === correctPassword) {
+                localStorage.setItem('authenticated', 'true');
+                window.location.href = 'questions.html'; // Redirect to main page
+            } else {
+                document.getElementById('error-message').innerText = 'Incorrect Username or Password!';
+            }
         }
-    }
-
-    function showQuestion() {
-        if (currentQuestionIndex < availableQuestions.length) {
-            const question = availableQuestions[currentQuestionIndex];
-            document.getElementById('question-container').innerText = 
-                `Question ${question.number}: ${question.text}`;
-        } else {
-            document.getElementById('question-container').innerText = 'No more questions!';
-        }
-    }
-
-    function nextQuestion() {
-        currentQuestionIndex++;
-        showQuestion();
-    }
     </script>
 </body>
 </html>
