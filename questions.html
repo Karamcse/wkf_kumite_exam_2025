@@ -33,42 +33,31 @@
             margin-bottom: 20px;
         }
 
-        #next-btn {
-            display: none; /* Hide 'Next Question' button initially */
+        #result-container {
+            display: none; /* Hidden until the quiz ends */
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .button-container button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button-container {
+            margin-top: 20px;
         }
     </style>
-    <script>
-        // Redirect unauthenticated users to the login page
-        if (localStorage.getItem('authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
-</head>
-<body>
-    <h1>Kumite Questions</h1>
-    
-    <!-- Input fields -->
-    <div id="input-container" class="input-container">
-        <label>Number of Questions to Run:</label>
-        <input type="number" id="num-questions" min="1" placeholder="Enter number of questions" />
-        <br>
-        <label>Exclude Questions (comma-separated):</label>
-        <input type="text" id="exclude-list" placeholder="e.g., 1,2,5,10" />
-        <br>
-        <button onclick="startQuiz()">Start Quiz</button>
-        <p id="error-message"></p>
-    </div>
-
-    <!-- Question container -->
-    <div id="question-container">Choose number of questions and exclusions to start.</div>
-    <button id="next-btn" onclick="nextQuestion()">Next Question</button>
-
     <script>
         let questions = [];
         let availableQuestions = [];
         let currentQuestionIndex = 0;
         let totalQuestionsToRun = 0;
         let questionTimer;
+        let correctAnswers = 0;
+        let wrongAnswers = []; // Store wrong answers
 
         // Fetch questions from JSON file
         fetch('./questions.json')
@@ -103,12 +92,12 @@
             totalQuestionsToRun = numQuestions;
             shuffleQuestions(); // Shuffle the filtered questions
             currentQuestionIndex = 0;
+            correctAnswers = 0;
+            wrongAnswers = []; // Reset wrong answers
 
             // Hide input fields and start quiz
             document.getElementById('input-container').style.display = 'none';
             document.getElementById('question-container').style.display = 'block';
-            document.getElementById('next-btn').style.display = 'inline-block';
-
             document.getElementById('error-message').innerText = '';
             showQuestion();
         }
@@ -125,13 +114,10 @@
                 const question = availableQuestions[currentQuestionIndex];
                 document.getElementById('question-container').innerText = 
                     `${currentQuestionIndex + 1}) Question ${question.number}: ${question.text}`;
-                
                 resetTimer();
             } else {
-                document.getElementById('question-container').innerText = 
-                    `${totalQuestionsToRun} questions completed!`;
-                document.getElementById('next-btn').style.display = 'none';
                 clearTimeout(questionTimer);
+                displayResults();
             }
         }
 
@@ -142,10 +128,68 @@
             }, 20000); // 20 seconds timer
         }
 
+        function validateAnswer(userAnswer) {
+            clearTimeout(questionTimer); // Stop the timer when an answer is chosen
+
+            const currentQuestion = availableQuestions[currentQuestionIndex];
+            if (userAnswer === currentQuestion.ans) {
+                correctAnswers++;
+            } else {
+                wrongAnswers.push(currentQuestion); // Add wrong answer to the list
+            }
+
+            nextQuestion();
+        }
+
         function nextQuestion() {
             currentQuestionIndex++;
             showQuestion();
         }
+
+        function displayResults() {
+            document.getElementById('question-container').style.display = 'none';
+            document.querySelector('.button-container').style.display = 'none';
+
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = `<h2>Quiz Completed!</h2>
+                <p>You answered ${correctAnswers} out of ${totalQuestionsToRun} questions correctly.</p>`;
+
+            if (wrongAnswers.length > 0) {
+                resultContainer.innerHTML += '<h3>Incorrect Answers:</h3><ul>';
+                wrongAnswers.forEach(q => {
+                    resultContainer.innerHTML += `<li><strong>Question ${q.number}:</strong> ${q.text}<br>Correct Answer: ${q.ans}</li>`;
+                });
+                resultContainer.innerHTML += '</ul>';
+            }
+        }
     </script>
+</head>
+<body>
+    <h1>Kumite Questions</h1>
+
+    <!-- Input fields -->
+    <div id="input-container" class="input-container">
+        <label>Number of Questions to Run:</label>
+        <input type="number" id="num-questions" min="1" placeholder="Enter number of questions" />
+        <br>
+        <label>Exclude Questions (comma-separated):</label>
+        <input type="text" id="exclude-list" placeholder="e.g., 1,2,5,10" />
+        <br>
+        <button onclick="startQuiz()">Start Quiz</button>
+        <p id="error-message"></p>
+    </div>
+
+    <!-- Question container -->
+    <div id="question-container"></div>
+
+    <!-- Answer buttons -->
+    <div class="button-container">
+        <button onclick="validateAnswer('true')">True</button>
+        <button onclick="validateAnswer('false')">False</button>
+    </div>
+
+    <!-- Result container -->
+    <div id="result-container"></div>
 </body>
 </html>
