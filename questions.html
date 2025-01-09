@@ -58,6 +58,7 @@
         let questionTimer;
         let correctAnswers = 0;
         let wrongAnswers = []; // Store wrong answers
+        let correctAnswerList = []; // Store correct answers
 
         // Fetch questions from JSON file
         fetch('./questions.json')
@@ -94,6 +95,7 @@
             currentQuestionIndex = 0;
             correctAnswers = 0;
             wrongAnswers = []; // Reset wrong answers
+            correctAnswerList = []; // Reset correct answers
 
             // Hide input fields and start quiz
             document.getElementById('input-container').style.display = 'none';
@@ -124,7 +126,7 @@
         function resetTimer() {
             clearTimeout(questionTimer);
             questionTimer = setTimeout(() => {
-                nextQuestion(); // Automatically move to the next question after 20 seconds
+                validateAnswer(null); // Mark unanswered as incorrect
             }, 20000); // 20 seconds timer
         }
 
@@ -134,8 +136,12 @@
             const currentQuestion = availableQuestions[currentQuestionIndex];
             if (userAnswer === currentQuestion.ans) {
                 correctAnswers++;
+                correctAnswerList.push(currentQuestion);
             } else {
-                wrongAnswers.push(currentQuestion); // Add wrong answer to the list
+                wrongAnswers.push({
+                    question: currentQuestion,
+                    userAnswer: userAnswer || 'Unanswered'
+                });
             }
 
             nextQuestion();
@@ -156,9 +162,20 @@
                 <p>You answered ${correctAnswers} out of ${totalQuestionsToRun} questions correctly.</p>`;
 
             if (wrongAnswers.length > 0) {
-                resultContainer.innerHTML += '<h3>Incorrect Answers:</h3><ul>';
-                wrongAnswers.forEach(q => {
-                    resultContainer.innerHTML += `<li><strong>Question ${q.number}:</strong> ${q.text}<br>Correct Answer: ${q.ans}</li>`;
+                resultContainer.innerHTML += '<h3>Incorrect or Unanswered Questions:</h3><ul>';
+                wrongAnswers.forEach(({ question, userAnswer }) => {
+                    resultContainer.innerHTML += `<li><strong>Question ${question.number}:</strong> ${question.text}<br>
+                        Correct Answer: ${question.ans}<br>
+                        Your Answer: ${userAnswer}</li>`;
+                });
+                resultContainer.innerHTML += '</ul>';
+            }
+
+            if (correctAnswerList.length > 0) {
+                resultContainer.innerHTML += '<h3>Correctly Answered Questions:</h3><ul>';
+                correctAnswerList.forEach(q => {
+                    resultContainer.innerHTML += `<li><strong>Question ${q.number}:</strong> ${q.text}<br>
+                        Correct Answer: ${q.ans}</li>`;
                 });
                 resultContainer.innerHTML += '</ul>';
             }
