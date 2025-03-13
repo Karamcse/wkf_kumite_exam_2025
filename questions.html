@@ -55,27 +55,24 @@
         }
 
         /* 🛠 Fix True/False Button Position */
-        .button-container {
-            position: fixed;
-            bottom: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            display: none;
+        .answer-btn {
+            padding: 15px 25px; /* Increase padding */
+            font-size: 18px; /* Increase font size */
+            cursor: pointer;
+            border: none; /* Remove border */
+            border-radius: 15px; /* Rounded corners */
+            background-color: white;
+            width: 100%; /* Full width of the parent */
+            max-width: 300px; /* Limit max width */
+            display: block; /* Ensures it takes full available space */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
+            -webkit-tap-highlight-color: transparent; /* Removes tap highlight in mobile */
         }
 
-        .answer-btn {
-            padding: 15px 25px; /* Increase padding for a bigger button */
-            font-size: 18px; /* Increase font size for better readability */
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 15px; /* More rounded corners */
-            background-color: white;
-            width: 90%; /* Make buttons wider */
-            max-width: 300px; /* Limit max width for better layout */
-            outline: none;
+        .answer-btn:focus, 
+        .answer-btn:active {
+            outline: none !important; /* Removes blue outline */
+            box-shadow: none !important; /* Removes extra highlight on tap */
         }
 
         .answer-btn:focus {
