@@ -55,30 +55,32 @@
         }
 
         /* 🛠 Fix True/False Button Position */
+        .button-container {
+            position: fixed;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            display: none;
+        }
+
         .answer-btn {
-            padding: 15px 25px; /* Increase padding */
-            font-size: 18px; /* Increase font size */
+            padding: 12px 20px;
+            font-size: 16px;
             cursor: pointer;
-            border: none; /* Remove border */
-            border-radius: 15px; /* Rounded corners */
-            background-color: white;
-            width: 100%; /* Full width of the parent */
-            max-width: 300px; /* Limit max width */
-            display: block; /* Ensures it takes full available space */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
-            -webkit-tap-highlight-color: transparent; /* Removes tap highlight in mobile */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white; /* Default button */
+            width: 150px;
         }
 
-        .answer-btn:focus, 
-        .answer-btn:active {
-            outline: none !important; /* Removes blue outline */
-            box-shadow: none !important; /* Removes extra highlight on tap */
+        .answer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .answer-btn:focus {
-            outline: none;
-            border-color: #999;
-        }
 
         #result-container {
             display: none;
