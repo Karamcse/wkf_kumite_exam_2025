@@ -213,6 +213,7 @@
             );
 
             if (isValid) {
+                localStorage.setItem('username', username); // Store username in localStorage
                 localStorage.setItem('authenticated', 'true');
                 window.location.href = 'questions.html';
             } else {
