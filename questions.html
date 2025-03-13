@@ -10,6 +10,7 @@
             text-align: center;
             margin-top: 20px;
             position: relative;
+            background-color: #f4f4f4;
         }
 
         #user-info {
@@ -26,32 +27,65 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
-            background-color: #f9f9f9;
+            background-color: #fff;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            margin-bottom: 20px;
         }
 
         #question-container {
-            font-size: 20px;
-            margin: 20px;
+            font-size: 22px;
             color: #333;
             display: none;
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            max-width: 700px;
         }
 
         .button-container {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between buttons */
+        }
+
+        .button-container button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            min-width: 120px;
+        }
+
+        .button-container button:hover {
+            opacity: 0.8;
+        }
+
+        .true-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .false-btn {
+            background-color: #dc3545;
+            color: white;
         }
 
         #result-container {
             display: none;
             margin-top: 20px;
             color: #333;
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -71,12 +105,12 @@
     </div>
 
     <!-- Question container -->
-    <div class="container" id="question-container"></div>
+    <div id="question-container"></div>
 
     <!-- Answer buttons -->
     <div class="button-container">
-        <button onclick="validateAnswer('true')">✔ True</button>
-        <button onclick="validateAnswer('false')">✘ False</button>
+        <button class="true-btn" onclick="validateAnswer('true')">✔ True</button>
+        <button class="false-btn" onclick="validateAnswer('false')">✘ False</button>
     </div>
 
     <!-- Result container -->
@@ -91,15 +125,15 @@
         let correctAnswers = 0;
         let wrongAnswers = [];
         let correctAnswerList = [];
-        let userID = localStorage.getItem('username') || 'Guest'; // Retrieve stored username
+        let userID = localStorage.getItem('username') || 'Guest'; 
 
-        document.getElementById("user-id").innerText = userID; // Display User ID
+        document.getElementById("user-id").innerText = userID; 
 
         if (localStorage.getItem('authenticated') !== 'true') {
-        window.location.href = 'login.html';
+            window.location.href = 'login.html';
         }
-        // Fetch questions from JSON file
-        fetch('./questions.json')
+
+        fetch('questions.json')
             .then(response => response.json())
             .then(data => {
                 questions = data;
@@ -127,8 +161,8 @@
         function showQuestion() {
             if (currentQuestionIndex < totalQuestionsToRun) {
                 const question = availableQuestions[currentQuestionIndex];
-                document.getElementById("question-container").innerText = 
-                    `${currentQuestionIndex + 1}) Question ${question.number}: ${question.text}`;
+                document.getElementById("question-container").innerHTML = 
+                    `<p>${currentQuestionIndex + 1}) Question ${question.number}: <strong>${question.text}</strong></p>`;
                 resetTimer();
             } else {
                 clearTimeout(questionTimer);
@@ -139,8 +173,8 @@
         function resetTimer() {
             clearTimeout(questionTimer);
             questionTimer = setTimeout(() => {
-                validateAnswer(null); // Mark unanswered as incorrect
-            }, 20000); // 20 seconds timer
+                validateAnswer(null);
+            }, 20000); 
         }
 
         function validateAnswer(userAnswer) {
@@ -171,25 +205,29 @@
                 <p>User ID: ${userID}</p>
                 <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
 
-            sendResultsToGoogleSheet(userID, userID, correctAnswers); // Save results with username
+            sendResultsToGoogleSheet(userID, userID, correctAnswers);
         }
 
-         function sendResultsToGoogleSheet(userId, username, score) {
-    const sheetURL = "https://script.google.com/macros/s/AKfycbx-60aAcJYx6hU1ynj4kRWadRhTnSiXyXauI-DxeAcC2CRZItP72XeD1dcmmPxugyyV/exec";
+        function sendResultsToGoogleSheet(userId, username, score) {
+            const sheetURL = "https://script.google.com/macros/s/AKfycby6gmCPUzundNkIf5C6Unavy_2AjsZDKQMiKc4ugQ_nQJYTvyv7ZwMQ-Ulb4GHCVU3a/exec";
 
-    fetch(sheetURL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ id: userId, username: username, score: score })
-    })
-    .then(response => response.text())
-    .then(data => console.log("Result Saved: ", data))
-    .catch(error => console.error("Error:", error));
-}
-
-
+            fetch(sheetURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: userId, username: username, score: score })
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Server Response:", data);
+                alert("Result Saved: " + data);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to save results. Check console for error.");
+            });
+        }
     </script>
 </body>
 </html>
