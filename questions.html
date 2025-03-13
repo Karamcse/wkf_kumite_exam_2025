@@ -49,33 +49,31 @@
 
         #question-container {
             font-size: 22px;
-            margin-top: 50px;
+            margin-top: 60px;
             color: #333;
             display: none;
         }
 
+        /* 🛠 Fix True/False Button Position */
         .button-container {
             position: fixed;
-            bottom: 20%; /* Position from bottom */
+            bottom: 30%;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             justify-content: center;
-            gap: 20px;
-            width: 100%; /* Full width */
-            max-width: 600px; /* Maximum width for better alignment */
+            gap: 15px;
             display: none;
         }
 
         .answer-btn {
-            padding: 15px 30px; /* Increased padding */
-            font-size: 18px; /* Bigger font size */
+            padding: 12px 20px;
+            font-size: 16px;
             cursor: pointer;
-            border: 2px solid #ccc; /* Slightly thicker border */
-            border-radius: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             background-color: white;
-            width: 45%; /* Each button takes 45% of the container */
-            text-align: center;
+            width: 70%;
         }
 
         .answer-btn:disabled {
@@ -90,18 +88,20 @@
         }
 
         /* 🔹 Responsive Design for Mobile */
-    @media screen and (max-width: 600px) {
-        .button-container {
-            bottom: 15%; /* Slightly higher for mobile */
-            width: 90%; /* More space in small screens */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+            .answer-btn {
+                font-size: 14px;
+                padding: 10px;
+                width: 50%; /* Ensure proper width */
+            }
+            #user-info {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
         }
-
-        .answer-btn {
-            font-size: 16px;
-            padding: 12px 20px;
-            width: 50%; /* Ensure proper width */
-        }
-    }
     </style>
 </head>
 <body>
