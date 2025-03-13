@@ -83,7 +83,7 @@
 
         #result-container {
             display: none;
-            margin-top: 20px;
+            margin-top: 60px;
             color: #333;
         }
 
@@ -268,10 +268,11 @@
                 console.log("Server Response:", data);
                 alert("Result Saved: " + data.message);
             })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to save results.");
-            });
+            // .catch(error => {
+            //     console.error("Error:", error);
+            //     alert("Failed to save results.");
+            // })
+            ;
         }
 
                 // 🔴 **Logout Function**
