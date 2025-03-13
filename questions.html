@@ -20,13 +20,17 @@
         #user-info {
             position: absolute;
             top: 10px;
-            right: 20px;
-            font-size: 16px;
+            right: 10px;
+            font-size: 14px;
             font-weight: bold;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             padding: 20px;
             border: 1px solid #ccc;
@@ -45,6 +49,9 @@
 
         .button-container {
             margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             display: none;
         }
 
@@ -54,9 +61,8 @@
             cursor: pointer;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: white; /* Default button */
-            width: 150px;
-            margin: 10px;
+            background-color: white;
+            width: 45%;
         }
 
         .answer-btn:disabled {
@@ -69,6 +75,17 @@
             margin-top: 20px;
             color: #333;
         }
+
+        /* 🔹 Responsive Design for Mobile */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+            .answer-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -79,11 +96,17 @@
         <h1>Karate Coach Kumite Examination – 2025</h1>
         <h3>Instructions:</h3>
         <ul style="text-align: left;">
+            <li>Enter your **Name** before starting.</li>
             <li>Read each statement carefully.</li>
-            <li>The answer to a question is true only if it is always true; otherwise, it is false.</li>
-            <li>Mark (✔) for True or (✘) for False in the box provided.</li>
+            <li>The answer to a question is **true** only if it is always true; otherwise, it is false.</li>
+            <li>Mark (✔) for **True** or (✘) for **False**.</li>
             <li>Do not leave any question unanswered.</li>
         </ul>
+        
+        <!-- 🆕 Name Input Field -->
+        <label for="name-input">Enter Your Name:</label>
+        <input type="text" id="name-input" placeholder="Enter your name" required />
+        
         <button onclick="startQuiz()">Start Quiz</button>
     </div>
 
@@ -102,8 +125,8 @@
     <script>
         // 🔹 **Ensure Always Redirect to `index.html` if Not Authenticated**
         if (!localStorage.getItem('authenticated') || !localStorage.getItem('username')) {
-            localStorage.clear(); // Clear session on refresh
-            window.location.href = 'index.html'; // Redirect to login page
+            localStorage.clear(); 
+            window.location.href = 'index.html';
         }
 
         let userID = localStorage.getItem('username');
@@ -139,9 +162,18 @@
         }
 
         function startQuiz() {
+            let nameInput = document.getElementById("name-input").value.trim();
+            if (nameInput === "") {
+                alert("Please enter your name to continue.");
+                return;
+            }
+
+            localStorage.setItem("username", nameInput);
+            document.getElementById("user-id").innerText = nameInput;
+
             document.getElementById("instruction-container").style.display = "none";
             document.getElementById("question-container").style.display = "block";
-            document.querySelector(".button-container").style.display = "block";
+            document.querySelector(".button-container").style.display = "flex";
             showQuestion();
         }
 
@@ -197,7 +229,7 @@
             // 🔴 **Auto Logout After Quiz Completion**
             setTimeout(() => {
                 logoutUser();
-            }, 5000); // Redirects to login after 5 seconds
+            }, 5000);
         }
 
         function sendResultsToGoogleSheet(userId, username, score) {
@@ -224,15 +256,15 @@
 
         // 🔴 **Logout Function**
         function logoutUser() {
-            localStorage.clear(); // Clears session data
-            sessionStorage.setItem("quizCompleted", "true"); // Store completion flag in session
+            localStorage.clear();
+            sessionStorage.setItem("quizCompleted", "true");
         }
 
         // 🔹 **Check if the quiz was completed before refresh**
         window.onload = function () {
             if (sessionStorage.getItem("quizCompleted")) {
-                sessionStorage.removeItem("quizCompleted"); // Clear flag
-                window.location.href = 'index.html'; // Redirect to login
+                sessionStorage.removeItem("quizCompleted");
+                window.location.href = 'index.html';
             }
         };
 
