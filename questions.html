@@ -191,6 +191,7 @@
             document.getElementById("instruction-container").style.display = "none";
             document.getElementById("question-container").style.display = "block";
             document.querySelector(".button-container").style.display = "flex";
+            document.getElementById("user-name").innerText = userName ? userName : "Not Provided";
             showQuestion();
         }
 
