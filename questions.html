@@ -62,29 +62,25 @@
             transform: translateX(-50%);
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 30px;
             display: none;
         }
 
-.answer-btn {
-    padding: 15px 25px; /* Increase padding for larger buttons */
-    font-size: 18px; /* Increase font size */
-    cursor: pointer;
-    border: none; /* Remove border for cleaner look */
-    border-radius: 25px; /* More rounded corners */
-    background-color: white;
-    width: 80%; /* Increase width to 80% */
-    max-width: 350px; /* Limit max width */
-    display: block; /* Ensures it fills available space */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
-    -webkit-tap-highlight-color: transparent; /* Removes tap highlight in mobile */
-}
+        .answer-btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            width: 45%;
+        }
 
-.answer-btn:focus, 
-.answer-btn:active {
-    outline: none !important; /* Removes blue outline */
-    box-shadow: none !important; /* Removes extra highlight on tap */
-}
+        .answer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         #result-container {
             display: none;
             margin-top: 60px;
