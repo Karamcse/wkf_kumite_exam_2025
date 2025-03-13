@@ -7,10 +7,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            margin-top: 20px;
-            position: relative;
-            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
         }
 
         #user-info {
@@ -22,74 +26,53 @@
         }
 
         .container {
-            max-width: 600px;
-            margin: auto;
+            width: 80%;
+            max-width: 800px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
-            background-color: #fff;
+            background-color: #ffffff;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         #question-container {
             font-size: 22px;
+            margin: 20px 0;
             color: #333;
             display: none;
-            text-align: center;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            margin: 20px auto;
-            max-width: 700px;
         }
 
         .button-container {
             margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 20px; /* Space between buttons */
+            display: none;
         }
 
-        .button-container button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
+        .answer-btn {
+            padding: 12px 20px;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
-            min-width: 120px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white; /* Default button */
+            width: 150px;
+            margin: 10px;
         }
 
-        .button-container button:hover {
-            opacity: 0.8;
-        }
-
-        .true-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .false-btn {
-            background-color: #dc3545;
-            color: white;
+        .answer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         #result-container {
             display: none;
             margin-top: 20px;
             color: #333;
-            max-width: 700px;
-            margin: auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body>
+
     <div id="user-info">ID No: <span id="user-id"></span></div>
 
     <div class="container" id="instruction-container">
@@ -105,18 +88,27 @@
     </div>
 
     <!-- Question container -->
-    <div id="question-container"></div>
+    <div class="container" id="question-container"></div>
 
     <!-- Answer buttons -->
     <div class="button-container">
-        <button class="true-btn" onclick="validateAnswer('true')">✔ True</button>
-        <button class="false-btn" onclick="validateAnswer('false')">✘ False</button>
+        <button class="answer-btn" onclick="validateAnswer('true')">✔ True</button>
+        <button class="answer-btn" onclick="validateAnswer('false')">✘ False</button>
     </div>
 
     <!-- Result container -->
     <div id="result-container"></div>
 
     <script>
+        // 🔹 **Ensure Always Redirect to `index.html` if Not Authenticated**
+        if (!localStorage.getItem('authenticated') || !localStorage.getItem('username')) {
+            localStorage.clear(); // Clear session on refresh
+            window.location.href = 'index.html'; // Redirect to login page
+        }
+
+        let userID = localStorage.getItem('username');
+        document.getElementById("user-id").innerText = userID;
+
         let questions = [];
         let availableQuestions = [];
         let currentQuestionIndex = 0;
@@ -125,15 +117,9 @@
         let correctAnswers = 0;
         let wrongAnswers = [];
         let correctAnswerList = [];
-        let userID = localStorage.getItem('username') || 'Guest'; 
 
-        document.getElementById("user-id").innerText = userID; 
-
-        if (localStorage.getItem('authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-
-        fetch('questions.json')
+        // Fetch questions from JSON file
+        fetch('./questions.json')
             .then(response => response.json())
             .then(data => {
                 questions = data;
@@ -155,6 +141,7 @@
         function startQuiz() {
             document.getElementById("instruction-container").style.display = "none";
             document.getElementById("question-container").style.display = "block";
+            document.querySelector(".button-container").style.display = "block";
             showQuestion();
         }
 
@@ -162,7 +149,7 @@
             if (currentQuestionIndex < totalQuestionsToRun) {
                 const question = availableQuestions[currentQuestionIndex];
                 document.getElementById("question-container").innerHTML = 
-                    `<p>${currentQuestionIndex + 1}) Question ${question.number}: <strong>${question.text}</strong></p>`;
+                    `<p><strong>${currentQuestionIndex + 1})</strong> ${question.text}</p>`;
                 resetTimer();
             } else {
                 clearTimeout(questionTimer);
@@ -174,7 +161,7 @@
             clearTimeout(questionTimer);
             questionTimer = setTimeout(() => {
                 validateAnswer(null);
-            }, 20000); 
+            }, 20000);
         }
 
         function validateAnswer(userAnswer) {
@@ -206,6 +193,11 @@
                 <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
 
             sendResultsToGoogleSheet(userID, userID, correctAnswers);
+
+            // 🔴 **Auto Logout After Quiz Completion**
+            setTimeout(() => {
+                logoutUser();
+            }, 5000); // Redirects to login after 5 seconds
         }
 
         function sendResultsToGoogleSheet(userId, username, score) {
@@ -218,16 +210,32 @@
                 },
                 body: JSON.stringify({ id: userId, username: username, score: score })
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
                 console.log("Server Response:", data);
-                alert("Result Saved: " + data);
+                alert("Result Saved: " + data.message);
             })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to save results. Check console for error.");
-            });
+            // .catch(error => {
+            //     console.error("Error:", error);
+            //     alert("Failed to save results. Check console for error.");
+            // })
+            ;
         }
+
+        // 🔴 **Logout Function**
+        function logoutUser() {
+            localStorage.clear(); // Clears session data
+            sessionStorage.setItem("quizCompleted", "true"); // Store completion flag in session
+        }
+
+        // 🔹 **Check if the quiz was completed before refresh**
+        window.onload = function () {
+            if (sessionStorage.getItem("quizCompleted")) {
+                sessionStorage.removeItem("quizCompleted"); // Clear flag
+                window.location.href = 'index.html'; // Redirect to login
+            }
+        };
+
     </script>
 </body>
 </html>
