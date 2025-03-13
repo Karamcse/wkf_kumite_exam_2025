@@ -9,112 +9,125 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 20px;
+            position: relative;
         }
 
-        input, button {
-            margin: 10px;
-            padding: 10px;
+        #user-info {
+            position: absolute;
+            top: 10px;
+            right: 20px;
             font-size: 16px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         #question-container {
             font-size: 20px;
             margin: 20px;
             color: #333;
-            display: none; /* Initially hidden */
-        }
-
-        #error-message {
-            color: red;
-            margin-bottom: 10px;
-        }
-
-        .input-container {
-            margin-bottom: 20px;
-        }
-
-        #result-container {
-            display: none; /* Hidden until the quiz ends */
-            margin-top: 20px;
-            color: #333;
-        }
-
-        .button-container button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            display: none;
         }
 
         .button-container {
             margin-top: 20px;
         }
+
+        #result-container {
+            display: none;
+            margin-top: 20px;
+            color: #333;
+        }
     </style>
+</head>
+<body>
+    <div id="user-info">ID No: <span id="user-id"></span></div>
+
+    <div class="container" id="instruction-container">
+        <h1>Karate Coach Kumite Examination – 2025</h1>
+        <h3>Instructions:</h3>
+        <ul style="text-align: left;">
+            <li>Read each statement carefully.</li>
+            <li>The answer to a question is true only if it is always true; otherwise, it is false.</li>
+            <li>Mark (✔) for True or (✘) for False in the box provided.</li>
+            <li>Do not leave any question unanswered.</li>
+        </ul>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Question container -->
+    <div class="container" id="question-container"></div>
+
+    <!-- Answer buttons -->
+    <div class="button-container">
+        <button onclick="validateAnswer('true')">✔ True</button>
+        <button onclick="validateAnswer('false')">✘ False</button>
+    </div>
+
+    <!-- Result container -->
+    <div id="result-container"></div>
+
     <script>
         let questions = [];
         let availableQuestions = [];
         let currentQuestionIndex = 0;
-        let totalQuestionsToRun = 0;
+        let totalQuestionsToRun = 70;
         let questionTimer;
         let correctAnswers = 0;
-        let wrongAnswers = []; // Store wrong answers
-        let correctAnswerList = []; // Store correct answers
+        let wrongAnswers = [];
+        let correctAnswerList = [];
+        let userID = localStorage.getItem('username') || 'Guest'; // Retrieve stored username
 
+        document.getElementById("user-id").innerText = userID; // Display User ID
+
+        if (localStorage.getItem('authenticated') !== 'true') {
+        window.location.href = 'login.html';
+        }
         // Fetch questions from JSON file
         fetch('./questions.json')
             .then(response => response.json())
             .then(data => {
                 questions = data;
+                shuffleQuestions();
+                availableQuestions = questions.slice(0, totalQuestionsToRun);
             })
             .catch(error => {
                 console.error('Error loading questions:', error);
-                document.getElementById('error-message').innerText = 'Error loading questions!';
+                document.getElementById('instruction-container').innerHTML += '<p style="color:red;">Error loading questions!</p>';
             });
 
-        function startQuiz() {
-            const numQuestions = parseInt(document.getElementById('num-questions').value);
-            const excludeInput = document.getElementById('exclude-list').value;
-
-            // Convert exclude list to an array of numbers
-            let excludeList = [];
-            if (excludeInput.trim()) {
-                excludeList = excludeInput.split(',').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
             }
-
-            // Filter out excluded questions
-            availableQuestions = questions.filter(q => !excludeList.includes(q.number));
-
-            // Validate number of questions to run
-            if (numQuestions > availableQuestions.length) {
-                document.getElementById('error-message').innerText = `Only ${availableQuestions.length} questions are available after exclusions.`;
-                return;
-            }
-
-            totalQuestionsToRun = numQuestions;
-            shuffleQuestions(); // Shuffle the filtered questions
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
-            wrongAnswers = []; // Reset wrong answers
-            correctAnswerList = []; // Reset correct answers
-
-            // Hide input fields and start quiz
-            document.getElementById('input-container').style.display = 'none';
-            document.getElementById('question-container').style.display = 'block';
-            document.getElementById('error-message').innerText = '';
-            showQuestion();
         }
 
-        function shuffleQuestions() {
-            for (let i = availableQuestions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [availableQuestions[i], availableQuestions[j]] = [availableQuestions[j], availableQuestions[i]];
-            }
+        function startQuiz() {
+            document.getElementById("instruction-container").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            showQuestion();
         }
 
         function showQuestion() {
             if (currentQuestionIndex < totalQuestionsToRun) {
                 const question = availableQuestions[currentQuestionIndex];
-                document.getElementById('question-container').innerText = 
+                document.getElementById("question-container").innerText = 
                     `${currentQuestionIndex + 1}) Question ${question.number}: ${question.text}`;
                 resetTimer();
             } else {
@@ -131,7 +144,7 @@
         }
 
         function validateAnswer(userAnswer) {
-            clearTimeout(questionTimer); // Stop the timer when an answer is chosen
+            clearTimeout(questionTimer);
 
             const currentQuestion = availableQuestions[currentQuestionIndex];
             if (userAnswer === currentQuestion.ans) {
@@ -144,69 +157,39 @@
                 });
             }
 
-            nextQuestion();
-        }
-
-        function nextQuestion() {
             currentQuestionIndex++;
             showQuestion();
         }
 
         function displayResults() {
-            document.getElementById('question-container').style.display = 'none';
-            document.querySelector('.button-container').style.display = 'none';
+            document.getElementById("question-container").style.display = "none";
+            document.querySelector(".button-container").style.display = "none";
 
-            const resultContainer = document.getElementById('result-container');
-            resultContainer.style.display = 'block';
+            const resultContainer = document.getElementById("result-container");
+            resultContainer.style.display = "block";
             resultContainer.innerHTML = `<h2>Quiz Completed!</h2>
-                <p>You answered ${correctAnswers} out of ${totalQuestionsToRun} questions correctly.</p>`;
+                <p>User ID: ${userID}</p>
+                <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
 
-            if (wrongAnswers.length > 0) {
-                resultContainer.innerHTML += '<h3>Incorrect or Unanswered Questions:</h3><ul>';
-                wrongAnswers.forEach(({ question, userAnswer }) => {
-                    resultContainer.innerHTML += `<li><strong>Question ${question.number}:</strong> ${question.text}<br>
-                        Correct Answer: ${question.ans}<br>
-                        Your Answer: ${userAnswer}</li>`;
-                });
-                resultContainer.innerHTML += '</ul>';
-            }
-
-            if (correctAnswerList.length > 0) {
-                resultContainer.innerHTML += '<h3>Correctly Answered Questions:</h3><ul>';
-                correctAnswerList.forEach(q => {
-                    resultContainer.innerHTML += `<li><strong>Question ${q.number}:</strong> ${q.text}<br>
-                        Correct Answer: ${q.ans}</li>`;
-                });
-                resultContainer.innerHTML += '</ul>';
-            }
+            sendResultsToGoogleSheet(userID, userID, correctAnswers); // Save results with username
         }
+
+         function sendResultsToGoogleSheet(userId, username, score) {
+    const sheetURL = "https://script.google.com/macros/s/AKfycbx-60aAcJYx6hU1ynj4kRWadRhTnSiXyXauI-DxeAcC2CRZItP72XeD1dcmmPxugyyV/exec";
+
+    fetch(sheetURL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: userId, username: username, score: score })
+    })
+    .then(response => response.text())
+    .then(data => console.log("Result Saved: ", data))
+    .catch(error => console.error("Error:", error));
+}
+
+
     </script>
-</head>
-<body>
-    <h1>Kumite Questions</h1>
-
-    <!-- Input fields -->
-    <div id="input-container" class="input-container">
-        <label>Number of Questions to Run:</label>
-        <input type="number" id="num-questions" min="1" placeholder="Enter number of questions" />
-        <br>
-        <label>Exclude Questions (comma-separated):</label>
-        <input type="text" id="exclude-list" placeholder="e.g., 1,2,5,10" />
-        <br>
-        <button onclick="startQuiz()">Start Quiz</button>
-        <p id="error-message"></p>
-    </div>
-
-    <!-- Question container -->
-    <div id="question-container"></div>
-
-    <!-- Answer buttons -->
-    <div class="button-container">
-        <button onclick="validateAnswer('true')">True</button>
-        <button onclick="validateAnswer('false')">False</button>
-    </div>
-
-    <!-- Result container -->
-    <div id="result-container"></div>
 </body>
 </html>
