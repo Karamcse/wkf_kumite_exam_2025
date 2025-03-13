@@ -29,6 +29,12 @@
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
+        #user-name {
+            display: block;
+            font-size: 14px;
+            color: #333;
+        }
+
         .container {
             width: 90%;
             max-width: 800px;
@@ -90,7 +96,10 @@
 </head>
 <body>
 
-    <div id="user-info">ID No: <span id="user-id"></span></div>
+    <div id="user-info">
+        <span>ID No: <span id="user-id"></span></span>
+        <span id="user-name"></span> <!-- Name is displayed here -->
+    </div>
 
     <div class="container" id="instruction-container">
         <h1>Karate Coach Kumite Examination – 2025</h1>
@@ -129,8 +138,11 @@
             window.location.href = 'index.html';
         }
 
-        let userID = localStorage.getItem('username');
+        let userID = localStorage.getItem('username'); // User ID from login
+        let userName = localStorage.getItem('name'); // Get stored name
+        
         document.getElementById("user-id").innerText = userID;
+        document.getElementById("user-name").innerText = userName ? ` | Name: ${userName}` : " | Name: Not Provided";
 
         let questions = [];
         let availableQuestions = [];
@@ -168,8 +180,8 @@
                 return;
             }
 
-            localStorage.setItem("username", nameInput);
-            document.getElementById("user-id").innerText = nameInput;
+            localStorage.setItem("name", nameInput);
+            document.getElementById("user-name").innerText = ` | Name: ${nameInput}`;
 
             document.getElementById("instruction-container").style.display = "none";
             document.getElementById("question-container").style.display = "block";
@@ -221,12 +233,11 @@
             const resultContainer = document.getElementById("result-container");
             resultContainer.style.display = "block";
             resultContainer.innerHTML = `<h2>Quiz Completed!</h2>
-                <p>User ID: ${userID}</p>
+                <p>User ID: ${userID} | Name: ${userName}</p>
                 <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
 
-            sendResultsToGoogleSheet(userID, userID, correctAnswers);
+            sendResultsToGoogleSheet(userID, userName, correctAnswers);
 
-            // 🔴 **Auto Logout After Quiz Completion**
             setTimeout(() => {
                 logoutUser();
             }, 5000);
@@ -253,21 +264,18 @@
             // })
             ;
         }
-
-        // 🔴 **Logout Function**
+        
         function logoutUser() {
             localStorage.clear();
             sessionStorage.setItem("quizCompleted", "true");
         }
 
-        // 🔹 **Check if the quiz was completed before refresh**
         window.onload = function () {
             if (sessionStorage.getItem("quizCompleted")) {
                 sessionStorage.removeItem("quizCompleted");
                 window.location.href = 'index.html';
             }
         };
-
     </script>
 </body>
 </html>
