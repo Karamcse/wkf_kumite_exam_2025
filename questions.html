@@ -54,26 +54,28 @@
             display: none;
         }
 
-        /* 🛠 Fix True/False Button Position */
         .button-container {
             position: fixed;
-            bottom: 40%;
+            bottom: 20%; /* Position from bottom */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
+            width: 100%; /* Full width */
+            max-width: 600px; /* Maximum width for better alignment */
             display: none;
         }
 
         .answer-btn {
-            padding: 12px 20px;
-            font-size: 16px;
+            padding: 15px 30px; /* Increased padding */
+            font-size: 18px; /* Bigger font size */
             cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #ccc; /* Slightly thicker border */
+            border-radius: 10px;
             background-color: white;
-            width: 70%;
+            width: 45%; /* Each button takes 45% of the container */
+            text-align: center;
         }
 
         .answer-btn:disabled {
@@ -88,19 +90,18 @@
         }
 
         /* 🔹 Responsive Design for Mobile */
-        @media screen and (max-width: 600px) {
-            .container {
-                width: 95%;
-            }
-            .answer-btn {
-                font-size: 14px;
-                padding: 10px;
-            }
-            #user-info {
-                padding: 5px 10px;
-                font-size: 12px;
-            }
+    @media screen and (max-width: 600px) {
+        .button-container {
+            bottom: 15%; /* Slightly higher for mobile */
+            width: 90%; /* More space in small screens */
         }
+
+        .answer-btn {
+            font-size: 16px;
+            padding: 12px 20px;
+            width: 50%; /* Ensure proper width */
+        }
+    }
     </style>
 </head>
 <body>
