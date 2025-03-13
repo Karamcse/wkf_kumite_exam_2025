@@ -17,6 +17,7 @@
             height: 100vh;
         }
 
+        /* User Info Box - FIXED */
         #user-info {
             position: fixed;
             top: 5px;
@@ -28,12 +29,11 @@
             border-radius: 5px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
             display: flex;
-            gap: 15px; /* Adds spacing between ID and Name */
+            gap: 15px;
         }
 
-
         #user-info span {
-            display: block; /* Ensures proper alignment */
+            display: block;
         }
 
         .container {
@@ -44,18 +44,22 @@
             border-radius: 10px;
             background-color: #ffffff;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            margin-top: 40px;
+            margin-top: 50px;
         }
 
         #question-container {
             font-size: 22px;
-            margin: 60px 0 20px 0; /* Adds margin-top to push it below user-info */
+            margin-top: 50px;
             color: #333;
             display: none;
         }
 
+        /* 🛠 Fix True/False Button Position */
         .button-container {
-            margin-top: 20px;
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -137,15 +141,15 @@
     <div id="result-container"></div>
 
     <script>
-        // 🔹 **Ensure Always Redirect to `index.html` if Not Authenticated**
+        // Ensure user is authenticated, otherwise redirect to login
         if (!localStorage.getItem('authenticated') || !localStorage.getItem('username')) {
-            localStorage.clear(); 
+            localStorage.clear();
             window.location.href = 'index.html';
         }
 
-        let userID = localStorage.getItem('username') || 'Unknown'; // Get User ID from login
-        let userName = localStorage.getItem('name') || ''; // Get stored name
-        
+        let userID = localStorage.getItem('username') || 'Unknown';
+        let userName = localStorage.getItem('name') || '';
+
         document.getElementById("user-id").innerText = userID;
         document.getElementById("user-name").innerText = userName ? userName : "Not Provided";
 
@@ -158,7 +162,6 @@
         let wrongAnswers = [];
         let correctAnswerList = [];
 
-        // Fetch questions from JSON file
         fetch('./questions.json')
             .then(response => response.json())
             .then(data => {
@@ -231,56 +234,63 @@
             showQuestion();
         }
 
-        function displayResults() {
-            document.getElementById("question-container").style.display = "none";
-            document.querySelector(".button-container").style.display = "none";
+// 🔴 **Force Logout on Refresh - Always Redirect to Index Page if Not Logged In**
+window.onload = function () {
+    if (!localStorage.getItem('authenticated') || !localStorage.getItem('username')) {
+        logoutUser(); // Force logout if session is invalid
+    }
+};
 
-            const resultContainer = document.getElementById("result-container");
-            resultContainer.style.display = "block";
-            resultContainer.innerHTML = `<h2>Quiz Completed!</h2>
-                <p><strong>ID No:</strong> ${userID} <br><strong>Name:</strong> ${nameInput}</p>
-                <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
+/**
+ * 🔴 **Logout Function**
+ * - Clears all session and localStorage data
+ * - Redirects to login page (index.html)
+ */
+function logoutUser() {
+    localStorage.clear(); // Completely clear storage
+    sessionStorage.clear(); // Ensure all session flags are reset
+    window.location.href = 'index.html'; // Redirect to login page
+}
 
-            sendResultsToGoogleSheet(userID, userName, correctAnswers);
-            setTimeout(() => {
-                logoutUser();
-            }, 5000);
-        }
+// 🔹 **Force Logout After Quiz Completion**
+function displayResults() {
+    document.getElementById("question-container").style.display = "none";
+    document.querySelector(".button-container").style.display = "none";
 
-        function sendResultsToGoogleSheet(userId, username, score) {
-          const sheetURL = "https://script.google.com/macros/s/AKfycbzFU8Ugx10Ye9i_ue7qYNNU2IZQjs74QyQEQzcNjHtV_creVEheKjryxGMAhRM3vqMK/exec"; // Replace with your URL
+    const resultContainer = document.getElementById("result-container");
+    resultContainer.style.display = "block";
+    resultContainer.innerHTML = `<h2>Quiz Completed!</h2>
+        <p><strong>ID No:</strong> ${localStorage.getItem('username')} <br>
+        <strong>Name:</strong> ${localStorage.getItem('name')}</p>
+        <p>You answered ${correctAnswers} questions correctly out of ${totalQuestionsToRun}.</p>`;
 
-          fetch(sheetURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: userId, username: username, score: score }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Server Response:", data);
-              alert("Result Saved: " + data.message);
-            })
-            // .catch((error) => {
-            //   console.error("Error:", error);
-            //   alert("Failed to save results.");
-            // })
-            ;
-        }
+    sendResultsToGoogleSheet(localStorage.getItem('username'), localStorage.getItem('name'), correctAnswers);
 
+    // 🔴 **After 5 seconds, log out and redirect to index.html**
+    // setTimeout(logoutUser, 5000);
+}
 
-        // 🔴 **Logout Function**
-        function logoutUser() {
-            localStorage.clear();
-            sessionStorage.setItem("quizCompleted", "true");
-        }
+/**
+ * 🔹 **Send Results to Google Sheet**
+ */
+function sendResultsToGoogleSheet(userId, username, score) {
+    const sheetURL = "https://script.google.com/macros/s/AKfycbzFU8Ugx10Ye9i_ue7qYNNU2IZQjs74QyQEQzcNjHtV_creVEheKjryxGMAhRM3vqMK/exec"; // Replace with your Google Apps Script URL
 
-        // 🔹 **Check if the quiz was completed before refresh**
-        window.onload = function () {
-            if (sessionStorage.getItem("quizCompleted")) {
-                sessionStorage.removeItem("quizCompleted");
-                window.location.href = 'index.html';
-            }
-        };
+    fetch(sheetURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: userId, username: username, score: score }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server Response:", data);
+        alert("Result Saved: " + data.message);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to save results.");
+    });
+}
     </script>
 </body>
 </html>
