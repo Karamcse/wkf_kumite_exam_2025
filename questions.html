@@ -256,21 +256,24 @@
          * 🔹 **Send Results to Google Sheet**
          */
             function sendResultsToGoogleSheet(userId, username, score) {
-              const sheetURL = "https://script.google.com/macros/s/AKfycbz17QiroUhdr1Tg_0aCbKjRXuDWKzM2o_spvrwfNbQhm2_KL31jJe6j6gfbUUl724A/exec"; // Use the URL from GAS deployment
+              const sheetURL = "YOUR_GAS_WEB_APP_URL"; // Use HTTPS
 
               fetch(sheetURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
-                  id: 'karam', 
-                  username: 'atet dsf ', 
-                  score: 60 
-                  // Timestamp is added by GAS automatically!
+                  id: userId, 
+                  username: username, 
+                  score: score // Remove "timestamp"
                 }),
               })
               .then(response => response.json())
-              .then(data => alert(data.status === "success" ? "Saved!" : "Error: " + data.message))
-              .catch(error => alert("Error: " + error));
+              .then(data => console.log(data))
+                .catch(error => {
+                    console.error("Fetch Error:", error);
+                    console.error("User Info - ID:", userId, "Username:", username, "Score:", score);
+                  });
+
             }
 
 
