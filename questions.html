@@ -256,19 +256,19 @@
          * 🔹 **Send Results to Google Sheet**
          */
         function sendResultsToGoogleSheet(userId, username, score) {
-              const sheetURL = "https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbyLqhDd07DSCx4BcTJ6B-9j9-FWjkllHympGo0YIqhnB98fhmJ0s3FneG9LxOGskSaw/exec"; // Use HTTPS
+              const sheetURL = "https://script.google.com/macros/s/AKfycbzRZEwePor4sCv4IdAT17IkXj2m2fj_utJzJsdc4wGf6o1iK4SxV29vd8e8hohZi4kk/exec"; // Use HTTPS
 
-              fetch(sheetURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                  id: userId, 
-                  username: username, 
-                  score: score // Remove "timestamp"
-                }),
-              })
-              .then(response => response.json())
-              .then(data => console.log(data))
+                fetch(sheetURL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ 
+                    id: userId, 
+                    username: username, 
+                    score: score 
+                  }),
+                  mode: 'no-cors'
+                })
+                .then(() => console.log("Request sent successfully"))
                 .catch(error => {
                     console.error("Fetch Error:", error);
                     console.error("User Info - ID:", userId, "Username:", username, "Score:", score);
