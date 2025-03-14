@@ -256,24 +256,28 @@
          * 🔹 **Send Results to Google Sheet**
          */
         function sendResultsToGoogleSheet(userId, username, score) {
-            const sheetURL = "https://script.google.com/macros/s/AKfycbzFU8Ugx10Ye9i_ue7qYNNU2IZQjs74QyQEQzcNjHtV_creVEheKjryxGMAhRM3vqMK/exec"; // Replace with your Google Apps Script URL
+            const sheetURL = "https://script.google.com/macros/s/AKfycbwNWbcdFdNf2gvaNZZQyoPZmTt0znF6EaL8nJSprrmMYhfk_ipzHTQEFhr1h0NRuUmY/exec"; // Replace with actual URL
 
             fetch(sheetURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: userId, username: username, score: score }),
+                body: JSON.stringify({ id: userId, username: username, score: score, timestamp: new Date().toISOString() }),
             })
             .then(response => response.json())
             .then(data => {
                 console.log("Server Response:", data);
-                alert("Result Saved: " + data.message);
+                if (data.status === "success") {
+                    alert("Result Saved: " + data.message);
+                } else {
+                    alert("Failed to save results: " + data.message);
+                }
             })
-            // .catch(error => {
-            //     console.error("Error:", error);
-            //     alert("Failed to save results.");
-            // })
-            ;
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to save results due to network error.");
+            });
         }
+
 
                 // 🔴 **Logout Function**
         function logoutUser() {
