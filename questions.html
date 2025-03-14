@@ -256,7 +256,7 @@
          * 🔹 **Send Results to Google Sheet**
          */
         function sendResultsToGoogleSheet(userId, username, score) {
-              const sheetURL = "https://script.google.com/macros/s/AKfycbyO5uDQ3Z0BXzdpaKS6WNMq3ZFFVSUr-ZwopKyrqplkZt58J2RrdfyXj43LcAkcQKo/exec"; // Use HTTPS
+              const sheetURL = "https://script.google.com/macros/s/AKfycbztnthWPVD8enonH3V0_OJprJzA9HXvPslD0Ze6FvV_eKsORVz_b0YIBLYJwd4M95yP/exec"; // Use HTTPS
 
               fetch(sheetURL, {
                 method: "POST",
@@ -272,7 +272,7 @@
                 .catch(error => {
                     console.error("Fetch Error:", error);
                     console.error("User Info - ID:", userId, "Username:", username, "Score:", score);
-                    alert(`Failed to send data. \nID: ${userId} \nUsername: ${username} \nScore: ${score}`);
+                    // alert(`Failed to send data. \nID: ${userId} \nUsername: ${username} \nScore: ${score}`);
                   });
 
             }
