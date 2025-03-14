@@ -272,6 +272,7 @@
                 .catch(error => {
                     console.error("Fetch Error:", error);
                     console.error("User Info - ID:", userId, "Username:", username, "Score:", score);
+                    alert(`Failed to send data. \nID: ${userId} \nUsername: ${username} \nScore: ${score}`);
                   });
 
             }
