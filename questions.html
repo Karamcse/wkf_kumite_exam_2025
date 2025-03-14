@@ -256,7 +256,7 @@
          * 🔹 **Send Results to Google Sheet**
          */
         function sendResultsToGoogleSheet(userId, username, score) {
-            const sheetURL = "https://script.google.com/macros/s/AKfycbwI13mXUwOXQBQyV2014mTy1dgR7rAoNcTVeBkVdiBfsLMjJVyukihUfq8A7DAuywjm/exec"; // Use your actual URL
+            const sheetURL = "https://script.google.com/macros/s/AKfycbx_wg0PfiL9EiKfE8qmiDAJBeKdnGrYAtOGjGtWvf_uGNsOHpLgA4maRvJMUVg6XiyM/exec"; // Replace with your deployed URL
 
             fetch(sheetURL, {
                 method: "POST",
@@ -264,18 +264,12 @@
                 body: JSON.stringify({ 
                     id: userId, 
                     username: username, 
-                    score: score, 
-                    timestamp: new Date().toISOString() 
+                    score: score 
+                    // Removed timestamp from here
                 }),
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("Server Response:", data);
                 if (data.status === "success") {
                     alert("Result Saved: " + data.message);
                 } else {
@@ -283,8 +277,8 @@
                 }
             })
             .catch(error => {
-                console.error("Network Error:", error);
-                alert("Failed to save results due to network error.");
+                console.error("Error:", error);
+                alert("Failed to save results. Check console for details.");
             });
         }
 
