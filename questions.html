@@ -255,32 +255,23 @@
         /**
          * 🔹 **Send Results to Google Sheet**
          */
-        function sendResultsToGoogleSheet(userId, username, score) {
-            const sheetURL = "https://script.google.com/macros/s/AKfycbx_wg0PfiL9EiKfE8qmiDAJBeKdnGrYAtOGjGtWvf_uGNsOHpLgA4maRvJMUVg6XiyM/exec"; // Replace with your deployed URL
+            function sendResultsToGoogleSheet(userId, username, score) {
+              const sheetURL = "https://script.google.com/macros/s/AKfycbz17QiroUhdr1Tg_0aCbKjRXuDWKzM2o_spvrwfNbQhm2_KL31jJe6j6gfbUUl724A/exec"; // Use the URL from GAS deployment
 
-            fetch(sheetURL, {
+              fetch(sheetURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
-                    id: userId, 
-                    username: username, 
-                    score: score 
-                    // Removed timestamp from here
+                  id: userId, 
+                  username: username, 
+                  score: score 
+                  // Timestamp is added by GAS automatically!
                 }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    alert("Result Saved: " + data.message);
-                } else {
-                    alert("Failed to save results: " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Failed to save results. Check console for details.");
-            });
-        }
+              })
+              .then(response => response.json())
+              .then(data => alert(data.status === "success" ? "Saved!" : "Error: " + data.message))
+              .catch(error => alert("Error: " + error));
+            }
 
 
                 // 🔴 **Logout Function**
