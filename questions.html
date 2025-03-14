@@ -256,7 +256,7 @@
          * 🔹 **Send Results to Google Sheet**
          */
         function sendResultsToGoogleSheet(userId, username, score) {
-              const sheetURL = "https://script.google.com/macros/s/AKfycbz-wuGfkitqKPpvlH0ySw6svHPxDJNblB7upbODJ1-_wdQHpBHwcS980H-jELy-ua8/exec"; // Use HTTPS
+              const sheetURL = "https://script.google.com/macros/s/AKfycbza7X7gXDeZgKPgPdTtQpO36K_BFmIOgCkHuZukt6DajtsE1NfoDgqj3P2sBEIIImsA/exec"; // Use HTTPS
 
               fetch(sheetURL, {
                 method: "POST",
@@ -294,3 +294,57 @@
     </script>
 </body>
 </html>
+
+
+
+<!-- const DATA_ENTRY_SHEET_NAME = "Sheet1";
+const TIME_STAMP_COLUMN_NAME = "Timestamp";
+
+// ✅ Handle OPTIONS requests properly
+function doGet() {
+  return sendResponse({ status: "success", message: "GET request received" });
+}
+
+// ✅ Handle POST request properly
+function doPost(request) {
+  try {
+    if (!request || !request.postData || !request.postData.contents) {
+      return sendResponse({ status: "error", message: "No data received" });
+    }
+
+    const data = JSON.parse(request.postData.contents);
+    appendToGoogleSheet(data);
+
+    return sendResponse({ status: "success", message: "Data saved!" });
+  } catch (error) {
+    return sendResponse({ status: "error", message: error.toString() });
+  }
+}
+
+// ✅ Function to append data to Google Sheet
+function appendToGoogleSheet(data) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DATA_ENTRY_SHEET_NAME);
+  if (!sheet) throw new Error(`Sheet not found: ${DATA_ENTRY_SHEET_NAME}`);
+
+  data[TIME_STAMP_COLUMN_NAME] = new Date().toISOString();
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const rowData = headers.map(header => data[header] || "");
+  sheet.appendRow(rowData);
+}
+
+// ✅ Universal CORS Response Handler
+function sendResponse(responseData) {
+  const response = ContentService.createTextOutput(JSON.stringify(responseData))
+    .setMimeType(ContentService.MimeType.JSON);
+
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  };
+
+  // Add headers properly
+  Object.keys(headers).forEach(header => response.setHeader(header, headers[header]));
+
+  return response;
+} -->
