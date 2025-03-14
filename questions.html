@@ -295,41 +295,62 @@
 </body>
 </html>
 
+<!-- 
+const DATA_ENTRY_SHEET_NAME = "Sheet1"; // Change if needed
 
-<!-- const DATA_ENTRY_SHEET_NAME = "Sheet1";
-const TIME_STAMP_COLUMN_NAME = "Timestamp";
-
-function doGet() {
-  return sendResponse({ status: "success", message: "GET request received" });
+function doGet(e) {
+  var url = 'https://script.google.com/macros/s/AKfycbzRZEwePor4sCv4IdAT17IkXj2m2fj_utJzJsdc4wGf6o1iK4SxV29vd8e8hohZi4kk/exec';
+  var response = UrlFetchApp.fetch(url, {
+    method: 'get',
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
+  });
+  return ContentService.createTextOutput(response.getContentText());
 }
 
 function doPost(request) {
   try {
     if (!request || !request.postData || !request.postData.contents) {
-      return sendResponse({ status: "error", message: "No data received" });
+      return sendCORSResponse({ status: "error", message: "No data received" });
     }
 
     const data = JSON.parse(request.postData.contents);
     appendToGoogleSheet(data);
 
-    return sendResponse({ status: "success", message: "Data saved!" });
+    return sendCORSResponse({ status: "success", message: "Data saved successfully!" });
   } catch (error) {
-    return sendResponse({ status: "error", message: error.toString() });
+    return sendCORSResponse({ status: "error", message: error.toString() });
   }
 }
 
+/**
+ * Send JSON Response Properly
+ */
+function sendCORSResponse(responseData) {
+  const output = ContentService.createTextOutput(JSON.stringify(responseData));
+  output.setMimeType(ContentService.MimeType.JSON);
+  return output;
+}
+
+/**
+ * Append Data to Google Sheet
+ */
 function appendToGoogleSheet(data) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DATA_ENTRY_SHEET_NAME);
   if (!sheet) throw new Error(`Sheet not found: ${DATA_ENTRY_SHEET_NAME}`);
 
-  data[TIME_STAMP_COLUMN_NAME] = new Date().toISOString();
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-  const rowData = headers.map(header => data[header] || "");
+  let rowData = headers.map(header => (header === "Timestamp" ? new Date().toISOString() : data[header] || ""));
+
   sheet.appendRow(rowData);
 }
 
-// ✅ FIXED sendResponse function (No .setHeader())
-function sendResponse(responseData) {
-  return ContentService.createTextOutput(JSON.stringify(responseData))
-    .setMimeType(ContentService.MimeType.JSON);
+/**
+ * Handle OPTIONS Requests (Preflight Request)
+ */
+function doOptions() {
+  const output = ContentService.createTextOutput("");
+  output.setMimeType(ContentService.MimeType.JSON);
+  return output;
 } -->
